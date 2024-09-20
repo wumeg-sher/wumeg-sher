@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Assets</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/016/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+
+const assets = ["cat.png", "a.png", "shimmer.mp3"];
+const path = "assets/";
+const progress = new Waiter();
+
+new Frame(FIT, 1024, 768, interstellar, dark, ready, assets, path);
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+    new Grid();
+
+
+
+
+const shimmer = new Aud("shimmer.mp3");
+//can't play the sound without the user interacting with it
+new Pane("mlem", pink).show(()=>{
+
+    shimmer.play();
+
+    new Pic("cat.png")
+        .pos(500, 100)
+        .scaleTo(S, 50)
+        .drag(S) 
+        .alp(0)
+        .animate({alpha:1},1); 
+
+    new Pic("a.png")
+        .pos(20, 100)
+        .scaleTo(S, 45)
+        .drag(S)
+        .alp(0)
+        .animate({alpha:1},1); 
+})
+    
+
+// F.loadAssets(assets, path)
+// F.on("complete", ()=>{})
+// preload assets, this form is only if you don't need those assets right away
+
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

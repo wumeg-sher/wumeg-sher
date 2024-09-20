@@ -1,0 +1,38 @@
+{
+    "fruits":[
+        {
+            "name":"apple",
+            "cost":1.39
+        }
+        ,
+        {
+            "name":"banana",
+            "cost":0.89
+        }
+        ,
+        {
+            "name":"strawberry",
+            "cost":5.99
+        }
+    ],
+
+    
+    "veggies":[
+        {
+            "name":"tomato",
+            "cost":1.29
+        }
+        ,
+        {
+            "name":"spinach",
+            "cost":0.50
+        }
+        ,
+        {
+            "name":"lettuce",
+            "cost":1.50
+        }
+
+    ]
+
+}

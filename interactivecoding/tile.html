@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Tiles</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/016/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, darker, dark, ready);
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+    
+const stars = new Tile(new Poly(30,5,0.5, [red, purple, pink], light, 2) ,5, 5, 20,20)
+    .centerReg()
+    .outline()
+    // .drag({
+    //     all:true
+    //     onTop:false})
+
+    .animate({
+        props:{scale:2, alpha:0.5},
+        time:0.5,
+        rewind:true,
+        loop:true,
+        sequence:0.5
+    });
+
+
+//e.currentTarget is the object on which the event is placed (the whole container)
+//e.target is the object that causes the event (individual star that was clicked)
+//sometimes they are the same thing
+
+stars.on("mousedown", (e)=>{
+    e.target.removeFrom();
+    timeout(1, ()=>{
+        e.target.addTo(stars);
+    })
+})
+
+// STYLE = {align:CENTER, valign:CENTER};
+// new Tile(new Poly({min:20, max:30},[5,6],0.5, series(red, purple, pink)),10, 5, 20,20)
+//     .center()
+//     .animate({rotation:300})
+
+
+
+
+        
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

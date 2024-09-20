@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/016/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+// if statement to test if the condition in () is true 
+
+let x = 3
+
+if (x>5){zogb();}
+
+else {zogr();}
+    
+
+
+const circle = new Circle(100, purple)
+    .center()
+    .drag({onTop:false});
+        
+
+
+const slider = new Slider(0.5, 3)
+    .pos(0,50,CENTER,BOTTOM)
+
+slider.on("change", (e)=>{
+//    zog(e.target.currentValue);
+//    zog(slider.currentValue);
+    circle.scale = slider.currentValue;
+    if (circle.scale>2.5 && circle.color != red)
+        {circle.color=red;
+        zogr("sound starting")}
+    if (circle.scale <=2.5 && circle.scale >= 1 && circle.color != pink)
+        {circle.color=pink};
+    
+    if (circle.scale<1 && circle.color != yellow)
+        {circle.color=yellow;}
+})
+
+
+const title = new Label("tummy hurts!!").pos(50,50)
+
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

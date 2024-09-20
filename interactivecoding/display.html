@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - display objects</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/016/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+    
+   // new Grid();
+
+    // const r = new Rectangle()
+    // .loc(100,100)
+    // .reg(CENTER)
+    // .outline()
+    // //.rot(45)
+    // //.sca(2)
+    // .animate({
+    //     props:{rotation:360}, 
+    //     time:2,
+    //     ease:"linear",
+    //     loop:true
+    // })
+
+
+
+const r = new Rectangle()
+    .centerReg()
+    //.outline()
+    //.rot(45)
+    //.sca(2)
+    .animate({
+        props:{scale:3, color:red}, 
+        time:1,
+        //ease:"linear",
+        rewind:true,
+        loop:true
+    })
+
+
+const o = new Circle()
+    .loc(100,100)
+    .animate({
+        props: {x:500}, 
+        time:1.5, 
+        ease:"backInOut",
+        rewind:true,
+        loop:true});
+
+o.color=yellow
+
+
+
+new Circle()
+    .loc(100,100)
+    .animate({
+        props: {y:700, color:red}, 
+        time:1.5, 
+        ease:"bounceOut",
+        loop:true});
+
+
+new Triangle()
+    .loc(500,100)
+    .animate({
+        props: {y:700, color:blue, rotation:600}, 
+        time:1.5, 
+        ease:"bounceOut",
+        loop:true,
+        rewind:true}); 
+        
+new Triangle()
+    .loc(600,300)
+    .animate({
+        props: {x:700, y:200, color:pink, rotation:360}, 
+        time:1.5, 
+        ease:"bounceOut",
+        rewind:true,
+        loop:true}); 
+
+        
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

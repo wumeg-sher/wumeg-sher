@@ -1,0 +1,55 @@
+{
+  "videogames": [
+    {
+      "name": "Bravely Default",
+      "rating": "92%",
+      "releaseDate": "oct2012",
+      "characters": [
+        {
+          "name": "edea",
+          "class": "warrior",
+          "strengthLevel": 7
+        },
+        {
+          "name": "agnes",
+          "class": "healer",
+          "strengthLevel": 6
+        }
+      ]
+    },
+    {
+      "name": "Fire Emblem Awakening",
+      "rating": "94%",
+      "releaseDate": "april2012",
+      "characters": [
+        {
+          "name": "lissa",
+          "class": "healer",
+          "strengthLevel": 3
+        },
+        {
+          "name": "lucina",
+          "class": "lord",
+          "strengthLevel": 9
+        }
+      ]
+    },
+    {
+      "name": "Legend of Zelda Breath of the Wild",
+      "rating": "96%",
+      "releaseDate": "march2017",
+      "characters": [
+        {
+          "name": "link",
+          "class": "warrior",
+          "strengthLevel": 9
+        },
+        {
+          "name": "revali",
+          "class": "archer",
+          "strengthLevel": 7
+        }
+      ]
+    }
+  ]
+}
