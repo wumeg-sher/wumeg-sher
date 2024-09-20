@@ -7,11 +7,12 @@
 <!-- zimjs.com - JavaScript Canvas Framework -->
 <script type="module">
 
-import zim from "https://zimjs.org/cdn/016/zim";
+import zim from "https://zimjs.org/cdn/016/zim_game";
+// added game module for timer and scorer
 
 
-const coins = ["bitcoin.png","ethereum.png", "ripple.png", "tether.png"];
-const assets = [...coins, "eth.png", "head.png"]; //ES6 JS6 spread operator also [].concat(coins);
+const coinFiles = ["bitcoin.png","ethereum.png", "ripple.png", "tether.png"];
+const assets = [...coinFiles, "eth.png", "head.png", "gf_Roboto", "Computer.ttf"]; //ES6 JS6 spread operator also [].concat(coins);
 const path = "assets/";
 
 
@@ -102,13 +103,22 @@ function ready() {
 //GAME
 
 
+
+    // const coinName = coins[rand(coins.length-1)];
+    // const coinName = shuffle(coins)[0];
+    // const coinName = pluck(coins);
+    // const coinName = coins[Math.floor(Math.random()*coins.length)];
+    // ^raw JS options | this is replaced by rand() in ZIM
+
+
+
+const coins = new Container(W,H)
+    .addTo();
+
 interval({min:0.1, max:1}, ()=>{
-    // const coin = coins[rand(coins.length-1)]
-    // const coin = shuffle(coins)[0];
-    // const coin = pluck(coins);
-    const coin = new Pic(coins).sca(0.8)
+    const coin = new Pic(coinFiles).sca(0.8)
         coin
-            .loc(rand(0,W-coin.width), -100)
+            .loc(rand(0,W-coin.width), -100, coins)
             .animate({
                 props:{y:H},
                 time:rand(1,3),
@@ -117,14 +127,66 @@ interval({min:0.1, max:1}, ()=>{
                     // target.removeFrom() gone from stage but still there 
                     target.dispose();
                 }
+            
             });
-        S.update();
+       // S.update();
+       //if (coin.hitTestBounds(head)) zog("hitting"); when the test happens is important
+});
+
+//coin.score = rand(1,5)*100;
+
+
+const head = new Pic("head.png");
+    head  
+        .sca(0.3)
+        .reg(CENTER)
+ //       .centerReg() ideally we don't do this because processing happens twice
+        .pos(0,0,CENTER,BOTTOM)
+        .bot();
+
+
+// Ticker.add(()=>{
+//     head.x++; //adds 1 to head
+// });
+
+// F.on("keydown", (e)=>{
+//     zogp(e.key);
+//     if (e.key=="ArrowRight") head.x+=5; built in key delay
+//     if (e.key=="ArrowLeft") head.x-=5;
+// });
+
+
+new MotionController({
+    target:head,
+    type:"keydown",
+    axis:HORIZONTAL,
+    boundary: new Boundary (head.width/2,head.y,W-head.width,0),
+    flip:HORIZONTAL
 });
 
 
 
+Ticker.add(()=>{
+    coins.loop(coin=>{
+        //if (coin.hitTestBounds(head, -15)) {coin.dispose() && zog("hitting")};
+        if (head.hitTestCircle(coin)) {
+            coin.dispose()
+            scorer.score+=100
+        };
+    }, true); //true for looping backwards when removing
+})
 
 
+// const scoreLabel = new Label(score, 50, null, white).pos(50,50,RIGHT)
+
+const scorer = new Scorer().pos(50,50,RIGHT);
+
+const timer = new Timer().pos(50,50);
+
+new Label("CRYPTO_CATCH", 70, "Computer.ttf", yellow)
+    //.pos(0,50,CENTER);
+    .loc(220, 38)
+    //.place()
 
 } // end ready
 
