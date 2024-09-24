@@ -1,0 +1,27 @@
+{
+  "hospital": [
+    {
+      "name": "Sheridan General Hospital",
+      "patients": [
+        {
+          "id": "001",
+          "fullName": "Alan Davisville",
+          "dateOfBirth": "2007-04-22",
+          "symptoms": ["headache","chills","hives"]
+        },
+        {
+          "id": "002",
+          "fullName": "Beth Eglington",
+          "dateOfBirth": "1990-11-08",
+          "symptoms": ["fever", "vomiting","seizures"]
+        },
+        {  
+        "id": "003",
+        "fullName": "Carl Finch",
+        "dateOfBirth": "2000-08-17",
+        "symptoms": ["headache", "vomiting","skin rashes"]
+      }
+      ]
+    }
+  ]
+}
