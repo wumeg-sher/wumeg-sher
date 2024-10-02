@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name = "description" content = "this is a page about forms">
+    <meta name = "keywords" content="input, select, label, UX, semantics">
+
+    <title>Forms</title>
+
+
+
+</head>
+<body>
+    
+
+	<form action="" method="">
+
+        <fieldset>
+            <legend>Personal information</legend>
+            <label for = "firstName">Label for first name</label>
+            <input type="text" name="firstName" id="firstName" placeholder="first name">
+    
+            <label for = "lastName">Label for last name</label>
+            <input type="text" name="lastName">
+
+            <label for = "userPassword">Label for password</label>
+            <input type="password" name="userPassword" id="userPassword">
+        </fieldset>
+
+
+        <label for ="terms">accept terms</label>
+        <input type = "checkbox" name ="terms" id = "terms">
+
+        <textarea name ="comment">Add comments here</textarea>
+
+        <select name ="country"> 
+            <option value="ca"> Canada </option>
+            <option value="us" selected> US </option>
+            <option value="mx"> Mexico </option>
+         </select>
+
+
+        CA<input type = "radio" name = "radioCountry" value="1"/>
+        US<input type = "radio" name = "radioCountry" value="2"/>
+        MX<input type = "radio" name = "radioCountry" value="3"/>
+
+
+        <input type="datetime-local" />
+        <input type="date" />
+        <input type="time" />
+        <input type="week" />
+        <input type="month" />
+
+
+        <input type="number" min="1" max="5"/>
+        <input type="range"  min="1" max="5" step="1"/>
+
+
+        <input type="text" name="search1" placeholder="search the web" />
+        <input type="text" name="search2" autofocus />
+        <input type="text" name="search3" required />
+
+
+		<input type="submit">
+
+
+	</form>
+
+    <p>Cheem tumbles like a dryer under the bed at 5AM</p>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+p, h1{
+    border-color:papayawhip;
+    border-width: 3px;
+    border-style: dashed;
+    box-sizing: content-box;
+    width: 60%;
+}
+
+h1{
+    width:50%;
+    background-color: peachpuff;
+    color: white;
+    border-color: orange;
+    border-radius: 10px;
+
+    padding:10px;
+    margin:20px;
+
+    position:relative;
+    left: 50px;
+}
+
+p::first-line {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+
+#mainH{
+    background-color: blanchedalmond;
+}
+
+#queen{
+    color:powderblue
+}
+
+li{
+    color:bisque
+}
+
+.warning{
+    color:maroon
+}
+
+/* unvisited link */
+a:link {
+    color: pink;
+}
+
+/* visited link */
+a:visited {
+    color: purple;
+}
+
+/* mouse over link */
+a:hover {
+    color: hotpink;
+    background-color: powderblue;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+}
