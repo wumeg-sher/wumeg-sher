@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Controls</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+
+
+    // const emitter = new Emitter({startPaused:true}).center();
+    // S.on("stagemousedown", ()=>{
+    //     emitter.loc(F.mouseX, F.mouseY).spurt(20);
+    // });
+
+
+
+    // const circles = [];
+    // loop(40, ()=>{
+    //     circles.push(new Circle(20, [orange, green, blue]));
+    //     }
+    // );
+    // const wrapper = new Wrapper(circles, 400, 20, 20).center();
+
+    // interval(.5, ()=>{
+    //     wrapper.resize(rand(300,500)).outline();
+    //     S.update();
+    //     }
+    // );
+
+    //new Pack(rand(200,600), rand(200,600)).center(); 
+
+    // const sun = new Beads({
+    //     path:new Blob({color:yellow}), //.radialGradient([yellow,orange],[.2,.8],0,0,0, 0,0,100),
+    //     obj:new Triangle(60, 60, 60, series(orange,yellow,red)).reg(null, 60),
+    //     interactive:false,
+    //     count:9
+    //     }
+    // )  
+    // .center().drag({all:true});
+
+    // sun.beads.animate({
+    //     props:{scaleY:1.7},
+    //     time:{min:1.5, max:2},
+    //     rewind:true,
+    //     loop:true,
+    //     }
+    // );
+
+
+    // STYLE = {borderColor:dark, borderWidth:20};
+    // const front = F.makeIcon().sca(2.5);
+    // const back = new Page(front.width, front.height, pink, yellow, 1);
+    // const label = new Label("ZIM Flipper").center(back);
+    // const card = new Flipper(front, back).center();
+
+    STYLE = {width:W/2, color:series(blue, pink, yellow, green)};
+    // add anything you want to each of these Pages
+    const page1 = new Page();
+    const page2 = new Page();
+    const page3 = new Page();
+    const page4 = new Page();
+    const pages = [page1, page2, page3, page4];
+    // 0 (default) will show only page 0 at right - like a cover
+    // 1 will show page 0 and page 1 to start - like an open book
+    new Book(W, H, pages, 1).addTo();
+
+
+
+
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

@@ -5,7 +5,7 @@ let titleContent = {
 };
 
 let links = ["Home", "About", "Contact"];
-let categories = ["Industry", "Technical", "Career"];
+
 
 
 let featuredArticle = [
@@ -13,6 +13,7 @@ let featuredArticle = [
     title:"Design Rational Documentation",
     image:  "articles/featured/featuredpic.png",
     url:"https://www.pencilandpaper.io/articles/design-rationale-documentation",
+    localURL: "articles/featured/featured.html",
     author:"Ceara Crawshaw",
     previewText:"What does it mean to document your design rationale? [...]" +
         "In short, it's the why of your design decisions.",
@@ -30,6 +31,7 @@ let careerArticle = [
     title:"14 Best UX Portfolio Website Builders for Junior Designers in 2024",
     image:  "articles/career1/uxportfolio.webp",
     url:"https://uxplaybook.org/articles/best-ux-portfolio-website-builders-2024",
+    localURL: "articles/career1/career1.html",
     author:"Christopher Nguyen",
     previewText:"Explore the top UX portfolio builders for junior designers." +
         "Dive into tools like Webflow, Framer, Behance, Squarespace, UXFolio, and Notion" ,
@@ -57,6 +59,7 @@ let careerArticle = [
     title:"How Entry-Level UX Designers can Land UX Jobs With No Experience",
     image:  "articles/career2/career2.jfif",
     url:"https://uxplaybook.org/articles/how-to-land-ux-job-with-no-experience",
+    localURL: "articles/career2/career2.html",
     author:"Christopher Nguyen",
     previewText:"Learn how to kickstart your UX career with zero experience.",
     longText: "Step 1: Leverage Your Transferable Skills in UX Design. "+
@@ -74,10 +77,12 @@ let careerArticle = [
 ];
 
 
-let technicalArticle = [{
+let technicalArticle = [
+    {
     title:"White space in UX design",
     image:  "articles/technical1/technical1.webp",
     url:"https://medium.com/ringcentral-ux/white-space-in-ux-design-2b6b996c2b9c",
+    localURL: "articles/technical1/technical1.html",
     author:"Sergey Vlastiuk",
     previewText:"It’s important when you’re putting together a design layout that you let elements on the page breathe." ,
     longText: "White space is a very useful technique when you’re creating design layouts. "+
@@ -92,6 +97,7 @@ let technicalArticle = [{
     title:"UX Design Process – An Actionable, 7-Step Guide",
     image:"articles/technical2/technical2.png",
     url:"https://www.uxpin.com/studio/blog/design-process-ux/",
+    localURL: "articles/technical2/technical2.html",
     author:"UXpin",
     previewText:"UX design process is systematic, iterative, and structured series of actions that is necessary for designing user experience." ,
     longText: "UX design is a digital product design methodology to solve a human problem. “UX” stands for user experience. "+
@@ -107,6 +113,7 @@ let industryArticle = [
     title:"Why UX Design is an Important Consideration",
     image:"articles/industry1/industry1.webp",
     url:"https://bmmagazine.co.uk/business/why-ux-design-is-an-important-consideration/",
+    localURL: "articles/industry1/industry1.html",
     author:"Business Matters",
     previewText:"UX, short for user experience, is a huge factor in designing and running a successful website. " ,
     longText: "UX refers to how a user interacts with any given product or service, in this case, the website. "+
@@ -120,6 +127,7 @@ let industryArticle = [
     title:"The Next Big AI-UX Trend—It’s not Conversational UI",
     image:"articles/industry2/industry2.jpg",
     url:"https://uxmag.com/articles/the-next-big-ai-ux-trend-its-not-conversational-ui",
+    localURL: "articles/industry2/industry2.html",
     author:"Kshitij Agrawal",
     previewText:" The article explores the concept of aiOS, highlighting four key values: "+
         "dynamic interfaces, interoperable apps, context-aware functionality, and the idea that everything can be an input and output.",
@@ -135,13 +143,13 @@ let industryArticle = [
     }
 ];
 
-
-
 let categoryArticles = [careerArticle, technicalArticle, industryArticle];
+let categories = ["Career", "Technical", "Industry"];
 
 
 let months = ["October", "September", "August" ,"July", "June", "May"];
-let visitorNum = ["456", "2465", "2164" ,"982", "1546", "1454"];
+let visitorNum = ["45", "246", "216" ,"98", "154", "145"];
+let tableData = [months, visitorNum]
 
 
 
@@ -163,12 +171,12 @@ function createArticle (articleInfo) {
 
         let imageName = document.createElement("img");
         imageName.src = articleInfo.image;
-        imageName.width = 500
+        imageName.width = 600
         container.appendChild(imageName);
 
         let urlName = document.createElement("a");
         urlName.textContent = "Link to article";
-        urlName.href = "https://www.pencilandpaper.io/articles/design-rationale-documentation";
+        urlName.href = articleInfo.localURL;
         container.appendChild(urlName)
 
         let authorName = document.createElement("p");
@@ -195,6 +203,9 @@ articleContainer.appendChild(createArticle(featuredArticle[0]))
 let sectionContainer = document.querySelector("#articleCategories");
 for (let i=0; i<categoryArticles.length; i++){
     let section = document.createElement("section");
+    let sectionHeading = document.createElement("h2");
+    sectionHeading.textContent = categories[i];
+    section.appendChild(sectionHeading);
     for (let j=0; j<categoryArticles[i].length; j++){
         section.appendChild(createArticle(categoryArticles[i][j]))
     };
@@ -205,10 +216,32 @@ for (let i=0; i<categoryArticles.length; i++){
 
 
 
-
-
 //setting visitor table 
+let table = document.querySelector("#visitorTable");
+for (let i=0; i<tableData.length; i++){
+    let row = document.createElement("tr");
+    for (let j=0; j<tableData[i].length; j++){
+        let data = document.createElement("td");
+        data.textContent = tableData[i][j];
+        row.appendChild(data);
+    }
+    table.appendChild(row);
+};
+
+
+
 
 
 
 //setting cookies footer
+let footer = document.querySelector("#footer")
+footer.textContent = "Website cookie usage"
+
+let cookieText = document.createElement("p");
+cookieText.textContent = "This website uses cookies. Please accept usage for a better experience";
+footer.appendChild(cookieText);
+
+let cookieLink = document.createElement("a");
+cookieLink.textContent = "Accept cookies"
+cookieLink.href = "#";
+footer.appendChild(cookieLink);

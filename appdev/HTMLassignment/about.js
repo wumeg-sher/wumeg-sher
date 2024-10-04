@@ -1,8 +1,7 @@
-
-
-let header = document.querySelector("#aboutHeader");
-let passage = document.querySelector("#aboutP");
-
+//content
+let titleContent = {
+    mainTitle: "IMM News Network",
+};
 
 let aboutContent = {
     headerContent: "About",
@@ -11,6 +10,16 @@ let aboutContent = {
         "Please enjoy these curated articles, and happy designing!"
 }
 
+
+
+//setting main header
+let mainT = document.querySelector("#title");
+mainT.textContent = titleContent.mainTitle;
+
+
+//setting content
+let header = document.querySelector("#aboutHeader");
+let passage = document.querySelector("#aboutP");
 
 header.textContent = aboutContent.headerContent;
 passage.textContent = aboutContent.passageContent;
