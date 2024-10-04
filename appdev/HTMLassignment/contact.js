@@ -8,7 +8,6 @@ let contactContent = {
 }
 
 
-
 //setting main header
 let mainT = document.querySelector("#title");
 mainT.textContent = titleContent.mainTitle;
@@ -20,18 +19,21 @@ header.textContent = contactContent.headerContent;
 
 
 
-// //submit button
-// document.forms.formName.addEventListener("submit", validateForm);
-// function checkForm(event){
-// 	event.preventDefault();
-	
-// 	//validate for code goes here
+//validating email address
+let theForm = document.forms.form;
 
-// 	if(formIsValid){
-// 		document.forms.formName.submit();
-// 	}else{
-// 		//show error
-// 	}
-// }
+theForm.addEventListener("submit", checkForm);
+
+function checkForm (event) {
+    event.preventDefault();
+    let emailEntry = document.querySelector("#email");
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailEntry.value))
+        {
+          return (true)
+        }
+          alert("Error: Invalid email address!")
+          return (false)
+};
+
 
 
