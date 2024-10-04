@@ -163,6 +163,7 @@ function createArticle (articleInfo) {
 
         let imageName = document.createElement("img");
         imageName.src = articleInfo.image;
+        imageName.width = 500
         container.appendChild(imageName);
 
         let urlName = document.createElement("a");
@@ -191,18 +192,15 @@ articleContainer.appendChild(createArticle(featuredArticle[0]))
 
 
 //setting categories
+let sectionContainer = document.querySelector("#articleCategories");
 for (let i=0; i<categoryArticles.length; i++){
-
     let section = document.createElement("section");
     for (let j=0; j<categoryArticles[i].length; j++){
         section.appendChild(createArticle(categoryArticles[i][j]))
     };
+    sectionContainer.appendChild(section);
 }
 
-
-
-let sectionContainer = document.querySelector("#articleCategories");
-//sectionContainer.appendChild(section)
 
 
 
