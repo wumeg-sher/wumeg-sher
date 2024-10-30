@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>build example1</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+
+
+
+const shape = new Shape(300,500).loc(100,100).outline();
+
+//s begin stroke with color, ss is stroke style (thickness)
+//mt() is move to, lt() is line to
+
+shape.s(purple).ss(3).mt(20,20).lt(60,60).ct(200,300,60,400);
+
+//new Circle(10,red).loc(shape.x+20,shape.y+20);
+
+const dotHolder = new Container(shape.width, shape.height).loc(shape).outline();
+
+const color = series(blue, red, orange);
+const radius = 5
+
+//let dot = new Circle(10,red).addTo(dotHolder).loc(20,20);
+new Circle(radius, color).loc(20,20,dotHolder);
+new Circle(radius, color).loc(60,60,dotHolder);
+new Circle(radius, color).loc(60,400,dotHolder);
+new Circle(radius, color).loc(200,300,dotHolder);
+
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
