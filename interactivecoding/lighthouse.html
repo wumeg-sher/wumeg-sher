@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - LightHouse - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+
+const assets = ["scene.jpg", "serpent1.jpg", "serpent2.jpg", "serpent3.jpg", "serpent4.jpg", "serpent5.jpg", "sub1.jpg", "sub2.jpg", "sub4.jpg", "sub5.jpg"];
+const path = "lighthouse/";
+
+new Frame(FIT, 1920, 1080, darker, black, ready, assets, path, new Waiter());
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+new Pic("scene.jpg").addTo();
+
+// let serpent1 = new Pic("serpent1.jpg").ble("lighten").drag().center().sca(.7);
+// let sub1 = new Pic("sub1.jpg").ble("lighten").drag().center();
+
+const w =200;
+const h= 600;
+
+const lightbeam = new Container(w,h)
+    .reg(CENTER, TOP)
+    .loc(1833,82)
+    .sca(1,0.5)
+ //   .outline();
+
+const lightTri = new Triangle(200, 200, 200, yellow)
+    .siz(w,h)
+    .reg(CENTER, TOP)
+    .center(lightbeam)
+    .alp(0.4)
+ //   .outline();
+
+const lightCir = new Circle(w/2, yellow, yellow, 2)
+    .loc(lightbeam.width/2, lightbeam.height*2, lightbeam)
+    .alp(.9)
+    .drag();
+
+
+ // 3. in an event (pressmove) on the circle, 
+
+    // A. make the triangle have a height (siz() or heightOnly)
+    // of the distance between the circle and the light 
+
+    // B. make it rotate using angle() between the light and the circle
+    // we may need to subtract 90
+
+function setLight() {
+    lightTri.siz(lightbeam.width, dist(lightCir, lightTri));
+    lightTri.rot(angle(lightCir, lightTri)+90)
+}
+
+lightCir.on("pressmove", setLight);
+
+const targets = new Rectangle (W,H, black).addTo().noMouse();
+new Pic ("scene.jpg").addTo(targets).alp(.7);
+const serpent1 = new Pic("serpent1.jpg")
+    .ble("lighten")
+    .center(targets)
+    .sca(.6);
+
+targets.setMask(lightCir);
+
+
+
+
+
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
