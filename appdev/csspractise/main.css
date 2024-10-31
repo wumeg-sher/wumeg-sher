@@ -1,0 +1,26 @@
+p{
+    color: pink;
+    font-size: larger;
+    letter-spacing: 0.2rem;
+}
+
+/* .sansSerif {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+} */
+
+
+
+.pacifico-regular {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+img{
+    width:40%
+}
+  
+.bg{
+    background-image: url("images/pexels.jpg");
+    background-size: cover;
+}
