@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>IC interactive logo</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+const assets = ["m.png", "e.png", "g.png", "i.png", "cat.png"]
+const path = "assets/"
+
+new Frame(FIT, 1920, 1080, light, black, ready, assets, path, new Waiter())
+function ready() {
+
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+    const w = 200
+    const h = 200
+
+
+
+    const cat = new Container(w*1.5,h*2)
+        .reg(CENTER, TOP)
+        .loc(1005,572)
+
+
+
+
+    //catHead container with all the head elements
+    const boundary = new Boundary(900,150,200,250);
+    const catHead = new Container(w, h)
+        .reg(CENTER, CENTER)
+        .loc((w*1.5)/2, -h, cat)
+        .drag({
+            all:true,
+            boundary: boundary})
+    catHead.scaleX = -1;
+
+    const headCircle = new Circle(w / 2, purple)
+        .loc(w / 2, h, catHead)
+        .sca(1, .9)
+        .ske(2)
+
+    new Triangle(70,70,90,purple) //l ear
+        .loc(w*18/64, h*1/2, catHead)
+        .siz(w*11/20, h*7/8)
+    new Triangle(70,70,90,purple) //r ear
+        .loc(w*46/64, h/2, catHead)
+        .siz(w*11/20, h*5/6)
+
+    new Triangle(15,15,15, pink) //nose
+        .loc(w*1/3, h*19/20, catHead)
+        .ske(20)
+        .rot(70)
+
+    const leye = new Circle(w/16, dark) 
+        .loc(w*1/4, h*5/6, catHead)
+        .ske(15)
+    const reye = new Circle(w/16, dark)
+        .loc(w*4/7, h*6/7, catHead)
+        .ske(15)
+
+
+
+    //cat body that follows head
+    let catBody = new Triangle(100,100,100, purple)
+        .reg(CENTER, BOTTOM)
+        .loc((w*1.5)/2, h, cat)
+        .siz(w*1.5, h*2)
+        .bot()
+
+
+
+
+    //g letter legs
+    const g1 = new Pic("g.png")
+        .loc(-w*1/16, h/2, cat)
+        .sca(0.6)
+    const g2 = new Pic("g.png")
+        .loc(w*7/8, h/2, cat)
+        .sca(0.6)
+
+    new Circle(w/3, purple) //leg fill
+        .loc(w*0.8, h, cat)
+        .siz(w*1.65, w*1.3)
+        .bot()
+
+
+    //other letters
+    const letterm = new Pic("m.png")
+        .loc(-w*1.85, h/2.2, cat)
+        .sca(0.45)
+
+    const lettere1 = new Pic("e.png")
+        .loc(-w*0.7, h/1.7, cat)
+        .sca(0.45)
+        
+    const lettere2 = new Pic("e.png")
+        .loc(w*2.1, h/1.75, cat)
+        .sca(0.45)
+
+    const letteri = new Pic("i.png")
+        .loc(w*1.8, h/1.65, cat)
+        .sca(0.45)
+        .siz(null, w*0.65)
+
+//reset catHead position on click on g
+    function resetPosition() {
+        catHead.loc((w*1.5)/2, -h, cat),
+        moveBody()
+    }; 
+
+    g1.on("click", resetPosition);
+    g2.on("click", resetPosition);
+
+
+//function to make catbody follow cathead
+function moveBody(){        
+    catBody.siz(catBody.width, dist(catBody, catHead), false)
+    catBody.rot(angle(catBody, catHead)+90)
+};
+
+catHead.on("pressmove", moveBody);
+
+
+//function for animate eye blink
+const leyeLid = new Circle(w/16, purple) 
+        .loc(w*1/4, h*2/3, catHead)
+        .ske(15);
+const reyeLid = new Circle(w/16, purple)
+        .loc(w*4/7, h*2/3, catHead)
+        .ske(15);
+
+function blink (){
+    leyeLid.animate({
+        props: {y: h*5/6},
+        time: .5,
+        rewind:true
+    }),
+    reyeLid.animate({
+        props: {y: h*6/7},
+        time: .5,
+        rewind:true
+    })
+};
+
+
+//blink on clicking on eyes or 'I'
+leye.on("click", blink);
+reye.on("click", blink);
+letteri.on("click", blink);
+
+
+
+
+
+//animation on clicking m
+function moveHat(){
+    letterm.animate({
+        props: {x:24, y:-313, rotation:"360"},
+        time:1
+    })
+}
+
+
+function delayBlink (){
+    leyeLid.animate({
+        props: {y: h*5/6},
+        time: .5,
+        rewind:true,
+        wait: 2
+    }),
+    reyeLid.animate({
+        props: {y: h*6/7},
+        time: .5,
+        rewind:true,
+        wait: 2
+    })
+};
+
+function duck (){
+    delayBlink(),
+    catHead.animate({
+        props: {y:-113},
+        wait: 2.5
+    }),
+    catBody.animate({
+        props: {scaleY: 3.6},
+        wait: 2.55
+    })
+}
+
+function returnHat(){
+    letterm.animate({
+        props: {x:-370, y:91},
+        wait: 4
+    })
+}
+
+
+letterm.on("click", ()=>{
+    resetPosition(),
+    letterm.top(),
+    moveHat(),
+    duck(),
+    returnHat()
+})
+
+
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

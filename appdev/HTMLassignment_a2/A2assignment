@@ -1,0 +1,10 @@
+Documentation of changes made to HTML assigment to conform with A2 requirements
+1. Dynamic site visitor data - addressed in HTML assignment 
+    (main.js 219-229)
+2. GDPR - linked HTML pages to external CSS file(homepage.css)
+    - made css styling for the cookie footer banner
+    - set up cookie button
+3. Reading assistance - added css styling for default mode
+    - added css styling for accessibility mode
+    - added function to toggle between view modes
+4. Keyboard shortcut - added shortcut functionality to toggle function

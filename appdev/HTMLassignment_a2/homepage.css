@@ -1,0 +1,100 @@
+#footer{
+    background-color: blanchedalmond;
+    border-width: 3px;
+    border-style: dashed;
+    box-sizing: content-box;
+    border-radius: 10px;
+    margin:20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+
+h1{
+    width:50%;
+    background-color: papayawhip;
+    color: black;
+    border-radius: 10px;
+
+    padding:10px;
+    margin:20px;
+}
+
+
+#header{
+    background-color: papayawhip;
+    color: black;
+    border-radius: 10px;
+
+    padding:10px;
+    margin:20px;
+}
+
+
+article{
+    background-color: peachpuff;
+    color: black;
+    border-radius: 10px;
+    padding:20px;
+    margin:20px;
+}
+
+
+
+table{
+    border: 1px solid;
+    border-collapse: collapse;
+    table-layout: fixed;
+    padding:10px;
+    margin:20px;
+    background-color: white;
+}
+
+
+th,
+td {
+  border: 1px solid black;
+  width: 110px;
+  overflow: hidden;
+}
+
+
+
+
+body {
+    background-color:cornsilk;
+    padding-right:20%;
+    padding-left:20%;
+    color: black;
+    font-size: 25px;
+  }
+  
+  
+  .accessibility-mode {
+    background-color: black;
+    color: white;
+    font-size:32px;
+    font-weight: 200;
+    padding-bottom: 25%;
+    margin: 50px;
+    letter-spacing: 0.2rem;
+  }
+
+ .accessibility-mode table{
+    color:black;
+}
+
+.accessibility-mode #footer{
+    color: black;
+
+}
+
+
+.accessibility-mode article {
+    background-color: rgb(255, 244, 234);
+    margin:40px;
+}
+
+
+
+

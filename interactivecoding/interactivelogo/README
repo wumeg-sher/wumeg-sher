@@ -1,0 +1,13 @@
+This is an interactive logo for my personal brand. 
+Interactivity elements:
+    - The cat's head is draggable 
+    - clicking the letter g will reset the cat to its original position 
+    - clicking the cat's eyes or the letter i will cause the cat to blink 
+    - clicking the letter m twice will play a small animation
+
+
+further project goals:
+    - make the m click interaction more robust
+    - include an interactivity element for the letter e (maybe a "meow" sound that plays)
+    - make it more clear that the letters are meant to be interacted with 
+    - adding stylization/shadows
