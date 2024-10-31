@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>ZIM - LightHouse - Code Creativity</title>
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim"
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+
+const sightings = ["sub1.jpg", "sub2.jpg", "sub3.jpg", "sub4.jpg", "sub5.jpg","serpent1.jpg", "serpent2.jpg", "serpent3.jpg", "serpent4.jpg", "serpent5.jpg"]
+const assets = ["scene.jpg", ...sightings];
+const path = "lighthouse/"
+
+new Frame(FIT, 1920, 1080, darker, black, ready, assets, path, new Waiter())
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+    new Pic("scene.jpg").addTo()
+
+    // add a serpent make it draggable and have a ble("lighten")
+
+    // new Pic("serpent1.jpg").center().drag().ble("lighten"); // .blendmodes();
+    // new Pic("sub1.jpg").center().drag().ble("lighten");
+
+    // make light 
+    // container 200x600 called light
+    // make Triangle (shaft) and use siz(200,600) on Triangle in container
+    // make Circle called (spot) at the bottom of the container
+
+    const w = 200
+    const h = 600
+    const light = new Container(w, h)
+        .reg(CENTER, TOP)
+        .sca(1, .5)
+        .loc(1838, 88)
+    // .place()
+    // .outline();
+
+    const shaft = new Triangle({
+        a: 100, b: 100, c: 100,
+        color: white.toAlpha(.2),
+        borderColor: white.toAlpha(.7),
+        strokeObj: { ignoreScale: true }
+    })
+        .siz(w, h)
+        .reg(CENTER, TOP)
+        .center(light)
+    // .outline()
+
+    const spot = new Circle(w / 2, faint, white, 3)
+        .loc(w / 2, h, light)  // add to container!!! 
+        .drag(new Boundary(0, H * .35, W, H * .65).contract(80))
+
+    const proportion = new Proportion(0, H, .2, 1.5)
+
+    spot.on("pressmove", doLight)
+    function doLight() {
+        // https://zimjs.com/zapp/Z_N5E7Z
+        // const point = light.localToGlobal(spot.x, spot.y);
+        const point = spot.localToGlobal(0, 0)
+        // zogr(decimals(point.y))
+
+        spot.sca(proportion.convert(point.y))
+        shaft.siz(spot.width, dist(spot, shaft))
+        shaft.rot(angle(shaft, spot) - 90)
+    }
+    doLight()
+
+    // 0. drag the circle 
+    // 1. set reg() of light (container) to center top
+    // 2. set the shaft reg() to the center and top of triangle
+
+    // 3. in an event (pressmove) on the circle, 
+
+    // A. make the triangle have a height (siz() or heightOnly)
+    // of the distance, using dist(), between the circle and the shaft 
+
+    // B. make it rotate using angle() between the shaft and circle
+    // we may need to subtract 90
+
+
+    // 4. add a Rect(W,H) called targets
+    // add another Pic() that is the scene to the rectangle 
+    // center a serpent on the rectangle
+
+    const targets = new Rectangle(W, H).addTo().noMouse()
+    new Pic("scene.jpg").addTo(targets).alp(.4)
+    const sub = new Pic("sub1.jpg")
+    sub
+        .sca(.3)
+        .loc(-sub.width, 500, targets)
+        .ble("lighten")
+        .animate({
+            props: { x: W },
+            time: 30,
+            loop: true,
+            ease: "linear"
+        })
+    // .outline();
+
+    const serpent = new Pic("serpent1.jpg")
+    serpent
+        .sca(-.9,.9)
+        .loc(W, 800, targets)
+        .ble("lighten")
+        .animate({
+            props: { x: +serpent.width},
+            time: 20,
+            loop: true,
+            ease: "linear"
+        })
+
+    // 5. use setMask to mask the targets with the circle
+
+    targets.setMask(spot)
+
+
+    // See ic25_build3...
+    // use Proportion to set scale of spot 
+    // so it is .2 in scale when at top and 1.5 in scale when at botton
+
+    // set the boundary of the drag to .4*H 
+    // x,y,width,height
+
+
+    // animate serpent from left side to right - loop
+
+    // add a sub closer 
+    // animate sub from right side to left - loop
+
+    // new Grid()
+
+    // new Panel and center it
+
+    const panel = new Panel({
+        titleBar: "Select Sightings",
+        titleBarBackgroundColor: darker,
+        titleBarHeight: 50,
+        width:W*.9,
+        height:H*.4,
+        backgroundColor:black.toAlpha(.8),
+        close:true
+    }).center()
+
+    // ZIM loop through sightings and make a new Pic() from each string
+    // and replace the sighting in the array with the new Pic.
+
+
+    //circle is inside pic and pics are scaled(reverse scale to make circles the same size)
+   
+    loop(sightings, (sighting,i)=>{
+        const pic = sightings[i] = new Pic(sighting).siz(300).reg(CENTER).ble("lighten")
+        //custom property
+        pic.highlight = new Circle(90, white).sca(1/pic.scale).center(pic).alp(.5).vis(false);
+        pic.on("mousedown", ()=>{
+            pic.highlight.vis(true).animate({
+                props:{scale:0}, 
+                from: true,
+                ease: "elasticOut"
+            });
+            S.update();
+        })
+    });
+
+  
+
+
+//tile the sightings so they have 5c 2r, spacingH and spacingV of 50 -uniquely
+//scaleTo() the panel 90,90 and center the tile in the panel 
+// STYLE the tile to be align:CENTER and valign:CENTER
+
+
+    STYLE = {
+        align:CENTER, valign:CENTER
+    };
+        
+
+    const pics = new Tile (sightings, 5,2,50,50, true) //true means unique 
+        .scaleTo(panel, 90,90)
+        .pos(0,30, CENTER, CENTER, panel)
+        // .center(panel)
+        // .mov(0, 20);
+
+// set the vis(false) of the circle, when mousedown on pic - show the circle
+// set circle as a circle property of the pic
+
+
+
+
+
+
+
+
+
+
+} // end ready
+
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+
+<body></body>
+
+</html>
