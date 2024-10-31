@@ -8,6 +8,7 @@ Got servo to rotate to 90 and then 180 degrees on button1 press
 on button2 press servo rotates back to 90 and then 0 degrees
 
 Built prototype on arduino, it works as expected 
+yoinked some servos (now have 4 total)
 Code below
 
 Next steps: 
@@ -17,6 +18,8 @@ TinkerCAD first and then build on arduino (use the actual paper)
 
 Stretch goal
 make 3x3 panel of pixels
+
+
 
 #include <Servo.h>
 
