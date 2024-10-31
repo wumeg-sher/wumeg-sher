@@ -1,0 +1,78 @@
+31 Oct 
+TIMELINES
+MILESTONES 
+BACKUPS
+
+TinkerCAD
+Got servo to rotate to 90 and then 180 degrees on button1 press
+on button2 press servo rotates back to 90 and then 0 degrees
+
+Built prototype on arduino, it works as expected 
+Code below
+
+Next steps: 
+reduce to 1 button that rotates from 0 to 90 to 180 and then back to 0
+get another servo to stick on the breadboard 
+TinkerCAD first and then build on arduino (use the actual paper)
+
+Stretch goal
+make 3x3 panel of pixels
+
+#include <Servo.h>
+
+Servo myservo;  // create servo object to control a servo
+
+int angle = 0;    // initial angle  for servo
+int angleStep = 90;
+
+#define LEFT 12   // pin 12 is connected to left button
+#define RIGHT  2  // pin 2 is connected to right button
+
+void setup() {
+  // Servo button demo by Robojax.com
+  Serial.begin(9600);          //  setup serial
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+  pinMode(LEFT,INPUT_PULLUP); // assign pin 12 ass input for Left button
+  pinMode(RIGHT,INPUT_PULLUP);// assing pin 2 as input for right button
+  myservo.write(angle);// send servo to the middle at 90 degrees
+ Serial.println("Robojax Servo Button ");
+}
+
+void loop() {
+  // Servo button demo by Robojax.com
+  while(digitalRead(RIGHT) == LOW){
+
+    if (angle > 0 && angle <= 270) {
+      angle = angle - angleStep;
+       if(angle < 0){
+        angle = 0;
+       }else{
+      myservo.write(angle); // move the servo to desired angle
+      Serial.print("Moved to: ");
+      Serial.print(angle);   // print the angle
+      Serial.println(" degree");
+       }
+    }
+    
+  delay(100); // waits for the servo to get there
+  }// while
+ // Servo button demo by Robojax.com
+
+  while(digitalRead(LEFT) == LOW){
+
+    // Servo button demo by Robojax.com
+    if (angle >= 0 && angle <= 270) {
+      angle = angle + angleStep;
+      if(angle >270){
+        angle =270;
+       }else{
+      myservo.write(angle); // move the servo to desired angle
+      Serial.print("Moved to: ");
+      Serial.print(angle);   // print the angle
+      Serial.println(" degree");
+       }
+    }
+    
+  delay(100); // waits for the servo to get there
+  }// 
+}
