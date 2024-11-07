@@ -13,7 +13,7 @@ import zim from "https://zimjs.org/cdn/017/zim"
 // See Docs under Frame for FIT, FILL, FULL, and TAG
 
 const sightings = ["sub1.jpg", "sub2.jpg", "sub3.jpg", "sub4.jpg", "sub5.jpg","serpent1.jpg", "serpent2.jpg", "serpent3.jpg", "serpent4.jpg", "serpent5.jpg"]
-const assets = ["scene.jpg", ...sightings];
+const assets = ["gf_Berkshire+Swash", "scene.jpg", ...sightings];
 const path = "lighthouse/"
 
 new Frame(FIT, 1920, 1080, darker, black, ready, assets, path, new Waiter())
@@ -147,7 +147,7 @@ function ready() {
         height:H*.4,
         backgroundColor:black.toAlpha(.8),
         close:true
-    }).center()
+    })//.center()
 
     // ZIM loop through sightings and make a new Pic() from each string
     // and replace the sighting in the array with the new Pic.
@@ -158,13 +158,26 @@ function ready() {
     loop(sightings, (sighting,i)=>{
         const pic = sightings[i] = new Pic(sighting).siz(300).reg(CENTER).ble("lighten")
         //custom property
-        pic.highlight = new Circle(90, white).sca(1/pic.scale).center(pic).alp(.5).vis(false);
+
+        pic.highlight = new Circle(90, white).sca(0).center(pic).alp(.5);
+        
         pic.on("mousedown", ()=>{
-            pic.highlight.vis(true).animate({
-                props:{scale:0}, 
-                from: true,
-                ease: "elasticOut"
-            });
+            if (pic.highlight.scale == 0){
+                pic.highlight.vis(true).sca(0).animate({
+                    props:{scale:1/pic.scale},
+                    ease: "elasticOut"
+                })
+            } else {
+
+                    pic.highlight.animate({
+                    props: {scale:0},
+                    ease: "backIn",
+                    time: 0.5,
+                    call:()=>{
+                        pic.highlight.sca(0)
+                    }
+            });}
+
             S.update();
         })
     });
@@ -193,6 +206,67 @@ function ready() {
 
 
 
+const points = [[21.9,-14.7,0,0,-59.8,63.4,59.8,-63.4,"mirror"],[140.2,-2.4,0,0,0,-50,0,50,"mirror"],[0,100,0,0,50,0,-50,0,"mirror"],[-98.8,6.1,0,0,-18.3,39,18.3,-39,"mirror"]]
+const path = new Blob({
+    points: points, 
+    borderColor: red,
+    interactive: false
+}).transformPoints("scaleX", 5)
+    .transformPoints("scaleY",3)
+    .loc(700, 665)
+    .alp(0)
+
+
+//const sub3 = new Pic ("sub3.jpg")
+// sub3.addTo().ble("lighten").reg(CENTER)
+// sub3.animate({
+//     props: {path: path, speed:true, zoom:true, orient:false, flip: true},
+//     time: 10,
+//     ease: "linear",
+//     loop: true
+// })
+
+// const colors = series(red, orange, green, blue)
+// const boxes = []
+// loop (20, ()=>{
+//     boxes.push(new Rectangle(100,100,colors()))
+// });
+
+// const list1 = new List({
+//     width:600,
+//     height:120,
+//     list:boxes, 
+//     vertical: false,
+//     // drop: true
+// }).center()
+
+// const list2 = new List({
+//     width:600,
+//     height:120,
+//     list:copy(boxes, true), 
+//     vertical: false,
+//     // drop: true,
+//     // dropTargets:[list1]
+// }).center().mov(0,200)
+
+// list1.dropTargets = [list1, list2]
+// list2.dropTargets = [list1, list2]
+
+
+
+STYLE = {outlineColor: blue, outlineWidth:5, once:true}
+new Label("Serps & Subs", 120, "Berkshire+Swash", black).pos(0, 70, CENTER)
+
+const pane = new Pane("weeh", yellow, null, W+50)
+pane.show()
+
+
+
+
+
+//sea monster spotter
+//serpent spotlight
+//deep see 
 
 
 
