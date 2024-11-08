@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Sheridan IC - 2024 Build Test</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+
+<script type=module>
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1300, 800, blue, darker, ready, "gf_Anton");
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+
+    // Welcome to the Sheridan Interactive Coding 1 Build Test.
+    // We have given you the parameters in the correct order 
+    // but if you feel you need to use the docs, you may.
+    // https://zimjs.com/docs.html
+
+    // Please avoid looking at other examples and no communication.
+    // You are welcome to ask the Professor questions
+    // and if you get stuck they may be able to give a hint.
+
+    // SEE the included video of the app
+
+    // Marks for the questions are in [marks]
+    // There are 14 questions and many have lettered sub questions A. B. C. etc.
+    // The total is out of 35.  Part marks will be given.
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // PART 0 - PHONE
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // 1.  We are going to make a phone three times        [3]
+    // so put the code to make the phone in this function  
+    function makePhone() {
+
+        // A. make a new Container() 300x600 and store it in a variable phone
+       const phone = new Container(300,600);
+        
+        // B. add a black Rectangle() 300x600 with a corner of 40 to the phone 
+        // and set the sha(black.toAlpha(.3),10,10,10)
+        new Rectangle (300,600, black, null, null, 40).addTo(phone).sha(black.toAlpha(.3),10,10,10);
+       
+        
+        // C. make a custom property of the phone called screen
+
+        phone.screen = new Rectangle (270,500, light, null,null,5).center(phone);
+        // and assign it a new Rectangle() that is 270x500, light and with a corner of 5
+        // that is centered on the phone
+        // You will use the screen property in PART3
+        
+
+        // HINT - if I have an object called house 
+        // then I can set a custom property using the dot syntax, like:
+        // house.door = red;
+
+
+        // D. use return phone; to return the phone container
+        // HINT: literally, use return phone;
+    return phone;
+
+    }
+    //makePhone().center();
+
+    // HINT
+    // makePhone will return the container 
+    // so you can use it just as if it were the container.
+    // Test the phone to see if it works using:  
+    // makePhone().center(); 
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // PART 1 - PHONE HEAD
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    // Here we make our head with title and mouth 
+    // and we do some animation and some interval work
+    // use the variables we provide as we will need them in other functions
+    // remember DO NOT re-declare them in the function 
+    // only assign them inside the function
+    
+    let head;
+    let mouth;
+    function part1() {
+
+        // 2. Here we make the head  [3]
+
+        // A. store the results of makePhone() in the already declared variable head
+        // set its reg(CENTER, 450) so it will rotate near the bottom 
+        // sca() it 1.2 and center it on the stage (remember, stage is default so you do not need it)
+
+        head = makePhone().reg(CENTER, 450).sca(1.2).center();
+
+
+        
+
+        // B. make a new Label() that says "P  h  o  n  e    H  e  a  d" 
+        // with a font size of 24, a font of "Anton" and yellow 
+        // pos() it 0,20,CENTER,TOP in the head 
+        // and set the alp() to .5 
+
+        new Label ("P  h  o  n  e    H  e  a  d" , 24, "Anton", yellow)
+            .pos(0,20,CENTER,TOP, head)
+            .alp(.5);
+
+        
+        
+
+        // C. we will eventually animate the head back to this start position 
+        // so store custom startX and startY properties on the head 
+        // that are equal to the head's current x and y property
+        // We will use these in PART 4
+
+
+        head.startX = head.x;
+        head.startY = head.y;
+        
+
+        // 3. Here we make the mouth and flip it in an interval  [3]
+        
+        // A. assign a new Squiggle() to the already declared mouth variable 
+        // the squiggle should have:
+        // set the reg() to CENTER and pos() it 0,150,CENTER,BOTTOM in the head  
+
+
+
+        mouth = new Squiggle({
+            color:red.darken(.1),
+            thickness:20, 
+            points:4,
+            interactive:false,
+            strokeObj:{caps:"round"},
+            length:150
+            }
+        );
+
+        mouth.reg(CENTER).pos(0,150,CENTER,BOTTOM, head);
+
+
+
+        
+
+        // B. make an interval() of .5 seconds and call an arrow function 
+        // inside the function set the rot() of the head to a rand(-5,5)
+        // flip the mouth by setting the sca(1, odds()?1:-1)
+        // this will make it either 1 or -1 at eaven odds 
+        // update the stage (S) 
+        // the interval should have null as its third parameter to run forever 
+        // and true for its fourth parameter so it runs right away
+
+
+        interval(.5, ()=>{
+            head.rot(rand(-5,5))
+            mouth.sca(1, odds()?1:-1)
+            S.update()},
+            null);
+
+
+        
+
+        // 4. Animate the head to the bottom and call PART2  [1]
+        // animate() the head with:
+
+        head.animate({
+            wait:0,  // NOTE: to test the app faster set this to 0 (set to 2 when done)
+            props:{y:H-50, scale:1},
+            ease:"backInOut",
+            time:.5,
+            call:part2
+            }
+        );
+        
+    }
+
+    part1();
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // PART 2 - SIGN
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    // Here we animate in a yellow sign 
+    // that says I wish I had Eye Balls 
+    // The eye balls are in two circles - circle1 and circle2
+    // that are declared outside the function to use across functions
+
+    let sign;
+    let circle1;
+    let circle2;
+    function part2() {
+
+        // 5. Here we make the sign  [2]
+        // Store a new Container() 900x200 in the already declared sign variable
+        // set the reg() to CENTER, pos() at 0,50,CENTER and rot() -5
+        // make a new Rectangle() 900x200 and yellow 
+        // add it to the sign and set the sha(black.toAlpha(.2),10,10,0)  
+
+        sign = new Container (900,200).reg(CENTER).pos(0,50,CENTER).rot(-5);
+
+        new Rectangle(900,200,yellow).addTo(sign).sha(black.toAlpha(.2),10,10,0);
+        
+
+        // 6. Here we make the label  [2]
+        // set the STYLE to font:"Anton" and size:60 
+        // as we use this across labels
+        // Then make a new Label() that says "I  WISH  I  HAD"
+        // and pos() it at 80,5,LEFT,CENTER in the sign
+
+        STYLE = {
+            font:"Anton",
+            size:60
+        };
+
+        new Label ("I WISH I HAD").pos(80,5,LEFT,CENTER, sign);
+        
+        
+        // 7. Here we make and animate the circles for EYE BALLS  [3]
+        
+        // A. make circle1 and circle2 
+        // these are each a new Circle() 90 in radius 
+        // The first is red and the second is orange 
+        // and they each have a white border that is 5 thick 
+        // The first is rot() -20 and the second is rot() 20 
+        // The first is loc() 530, 130 in the sign 
+        // The second is loc() 730, 80 in the sign
+
+        circle1 = new Circle (90, red, white, 5);
+        circle2 = new Circle (90, orange, white, 5);
+
+        circle1.rot(-20).loc(530,130,sign);
+        circle2.rot(20).loc(730,80,sign);
+
+        // B. chain an animate() to each circle
+        // The first will be:
+
+        circle1.animate({
+            from:true,
+            props:{y:-150},
+            ease:"bounceOut",
+            time:.8
+            }
+        );
+
+
+        // The second will be: 
+        circle2.animate({
+            from:true,
+            props:{y:-150},
+            ease:"bounceOut",
+            time:.8,
+            wait:.2,
+            call:part3
+            }
+        );
+
+        
+        
+        // C. add the labels
+        // The first will say "EYE" and be centered on circle1 and mov() 0,5 
+        // The second will say "BALLS" and be centered on circle2 and mov() 0,5 
+
+        new Label ("EYE").center(circle1).mov(0,5);
+        new Label ("BALLS").center(circle2).mov(0,5);
+
+        
+    }
+    // part2(); // uncomment to run part2 manually
+
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // PART 3 - INTERACTIVITY - HARDEST PART
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Here we add tap() to each eye and makePhone eyes 
+    // We set them each to drag and capture a pressup event 
+    // In the event function we hitTest to snap eyes on head 
+    // If both are on head then we call PART4 
+    // We need the leftBall and rightBall for PART4 
+    // so we declare them outside the function
+
+    let leftBall;
+    let rightBall;
+    function part3() {
+        
+        // 8. Set a variable called count to 0   [1]
+        // this variable will increase each eye we snap on the head 
+        // when it is 2 then both eyes are snapped
+
+        let count = 0
+
+        // 9. We will do basically the same interactivity for each eye.  [8]
+        // The only difference is the start position and the snap position.
+        // So make the right eye work and then copy it for the left eye
+        // and then swap the variable names.
+
+        // A. add a tap() method to circle1 and pass it an arrow function
+        // perhaps add a zogr() inside the arrow function 
+        // to make sure that you can press on the EYE circle 
+        // and see the red zog in the console F12.
+        
+        // IMPORTANT: 
+        // The tap() should have the function then null, null, true as its parameters 
+        // so that the tap only happens once 
+        // otherwise you could keep making eyes - which would be bad!
+
+        circle1.tap(()=>{
+
+            // B. in the arrow function store the results of makePhone() 
+            // in a const called leftEye - we can declare this locally.
+            // set the reg() to CENTER, rot() 90 to turn it sideways 
+            // sca() to .5 to make it smaller 
+            // pos() it at 50,100,LEFT,CENTER on the stage (default)
+            // and set it to drag() with all:true so all of it drags, not its parts
+            
+            const leftEye = makePhone()
+                .reg(CENTER)
+                .rot(90)
+                .sca(.5)
+                .pos(50, 100, LEFT, CENTER)
+                .drag({all:true});
+
+            // C. Add an on() pressup event that calls an arrow function 
+            // again, perhaps zogb() inside the arrow function 
+            // to make sure you see the zog in the console
+            // when pressing up (dropping) the eye after dragging it.
+
+
+                leftEye.on("pressup", ()=>{
+                    if (leftEye.hitTestBounds(head)) {
+                        leftEye.center(head).mov(-160,-50).noDrag();
+                        count++;
+                        if (count ==2) {
+                            part4()
+                        }
+                        S.update();
+                    }
+                }) //end of on pressup()
+            
+
+                // D. Inside the arrow function 
+                // test to see if the leftEye is hitTestBounds() the head 
+                // and if so, center() the leftEye on the head 
+                // and mov(-160, -50) 
+                // also turn off the dragging with noDrag().
+                // increase the count++  
+                // and if the count == 2 then call part4()
+                // also update the stage (S)
+
+                
+
+            // E. Outside (after) the pressup function 
+            // store a new Circle() inside the already declared leftBall variable 
+            // make the circle 150 and white
+            // center() it in the leftEye
+            // and setMask() the screen of the leftEye 
+            // Here is where you use the screen property that was created in PART0
+            // HINT: to use a property, put the object first, a dot, and then the property
+
+            
+            leftBall = new Circle (150,white)
+                    .center(leftEye)
+                    .setMask(leftEye.screen);
+            
+
+            // F. make a new Circle() that is 80 in radius and black (default)
+            // center() it on the leftBall
+            
+            new Circle (80, black).center(leftBall)
+            
+            // G. wiggle() the leftBall with "x", leftBall.x, 50,20, 2,4
+            // and wiggle the leftBall  with "y", leftBall.y, 50,20, 2,4
+
+            leftBall.wiggle("x", leftBall.x, 50,20, 2,4)
+            leftBall.wiggle("y", leftBall.y, 50,20, 2,4)
+            
+        }, null, null, true); //end tap
+        
+
+        // H. Outside (after) the circle1 tap() we want to do the same for circle2 
+        // Just a reminder, your ending parameters for the tap above should be null, null, true 
+        // Okay... so make sure that your left eye is working as well as you can... 
+        // then copy the whole circle1 tap() right to the null, null, true)
+        // and paste below here.
+
+        // Change the circle1 to circle2 as we are now tapping the right BALLS circle.
+        // Change all occurrences of leftEye to rightEye
+        // Change all occurrences of leftBall to rightBall
+        // NOTE: we just changed two similar variables!
+        // Change the pos() of 50,100,LEFT,CENTER to pos() of 50,100,RIGHT,CENTER
+        // Change the mov() of -160,-50 to mov() if 160,-60 // slightly off for fun!
+
+
+        circle2.tap(()=>{
+
+            const rightEye = makePhone()
+                .reg(CENTER)
+                .rot(90)
+                .sca(.5)
+                .pos(50, 100, RIGHT, CENTER)
+                .drag({all:true});
+
+                rightEye.on("pressup", ()=>{
+                    if (rightEye.hitTestBounds(head)) {
+                        rightEye.center(head).mov(160,-60).noDrag();
+                        count++;
+                        if (count ==2) {
+                            part4()
+                        }
+                        S.update();
+                    }
+                }) //end of on pressup()
+
+            rightBall = new Circle (150,white)
+                .center(rightEye)
+                .setMask(rightEye.screen);
+
+            new Circle (80, black).center(rightBall);
+
+            rightBall.wiggle("x", rightBall.x, 50,20, 2,4);
+            rightBall.wiggle("y", rightBall.y, 50,20, 2,4);
+
+        }, null, null, true); //end tap
+
+
+        // You should now have two draggable phone eyes 
+        // and when they both snap onto the head you go to PART4
+        
+    }
+    // part3(); // uncomment to run part3 manually
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // PART 4 - FINAL 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Here we make the eyes move together 
+    // We animate out the sign and up the head
+    // and give the head a smile ;-)
+    // We add an Emitter in behind to make rings!
+    // Then we are done!  See the SUBMITTING message.
+
+    function part4() {
+
+        // 10. Here we make both eyes move together  [2]
+        // use stopAnimate() on the rightBall to stop it wiggling 
+        // then with Ticker.add() pass in an arrow function 
+        // in the arrow function set the loc() of the rightBall 
+        // to the leftBall.x and leftBall.y 
+
+        stopAnimate(rightBall)
+        Ticker.add(()=>{
+            rightBall.loc(leftBall.x, leftBall.y)
+        });
+
+        // 11. animate() the sign up off the screen using:  [1]
+        sign.animate({
+            props:{y:-200},
+            ease:"backIn",
+            time:.7
+        });
+
+        // and animate() the head to its starting scale and position using:
+        head.animate({
+            wait:1,
+            props:{scale:1.2, x:head.startX, y:head.startY},
+            ease:"elasticOut",
+            time:2
+        });
+        
+
+
+        // 12. Here we remove the squiggle mouth and add a smile!  [2]
+        // use removeFrom() on the mouth (declared to be used across functions)
+        // store a new Circle() in a variable called smile 
+        // make the circle have a radius of 80, a color of red.darken(.1)
+        // and a percent of 40 - so it is just part of a circle. 
+        // rot() the circle 180 and pos() it at 0,120,CENTER,BOTTOM in the head
+        
+        mouth.removeFrom()
+        const smile = new Circle(80,red.darken(.1), null,null,null,40).rot(180).pos(0,120,CENTER,BOTTOM, head)
+
+        // 13. Make an interval() of .5 seconds and call an arrow function  [2]
+        // in the arrow function set the rot() of the smile to 
+        // a rand() number between 180-10 and 180+10
+        // Now the smile should move in a quirky manner
+
+        interval(.5, ()=>{
+            smile.rot(rand(180-10,180+10))
+        })
+        
+
+        // 14. Here we make an emitter with rings in behind our head  [2]
+        // make a timeout() of 1 second call an arrow function 
+        // and inside make a new Emitter() emit an obj of new Circle()
+        // the circle should be radius 100, borderColor green, borderWidth 30
+        // and have a strokeObj of {ignoreScale:true} 
+        // so the border stays 30 even when it scales bigger.
+        // Also set the emitter parameters to:
+            // gravity of 0,
+            // force of 0,
+            // interval of .5,
+            // shrink of false,
+            // fade of false,
+            // life of 4,
+            // animation of {props:{scale:8}, time:4, ease:"linear"}
+        // center() the emitter and add it to the bot()
+        
+        timeout(1, ()=>{
+            new Emitter ({
+                obj: new Circle({
+                    radius:100,
+                    borderColor:green,
+                    borderWidth:30,
+                    strokeObj:{ignoreScale:true}
+                }),
+                gravity:0,
+                force:0,
+                interval:.5,
+                shrink:false,
+                fade:false,
+                life:4,
+                animation:{props:{scale:8}, time:4, ease:"linear"}
+            }).center().bot();
+
+        
+
+    });
+    
+    // part4(); // uncomment to run part4 manually 
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SUBMITTING 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    // Please answer the following questions here and comment it out:
+
+    // i. What is your name?
+    // answer: 
+    
+    // ii. What mark out of 35 do you think you will get?
+    // answer:
+
+    // iii. What did you think of the test and your skills?
+    // answer: 
+
+    // When done, please ZIP your index.html page - do not ZIP the video 
+    // and submit to SLATE under Assignments > Build Test
+    // call the Professor over to show you have submitted
+    // and exit the room quietly
+    
+    // Thank you!
+    // Remember, treat this as a learning experience
+    // All the best.
+    
+    }
+}
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
