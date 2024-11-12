@@ -1,18 +1,60 @@
-.poppins-semibold-italic {
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-    font-style: italic;
-  }
 
-  .poppins-regular {
-    font-family: "Poppins", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
+
+.quicksand-font {
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+ }
+
+
+section{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+#articleCategories {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+@media ((max-width: 800px)) {
+  #articleCategories {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  } 
+}
+
+#feed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  width: 100%;
+}
+
+p{
+  color: black;
+  font-family: "Quicksand", sans-serif;
+}
 
 
 #footer{
-    background-color: blanchedalmond;
+    background-color: whitesmoke;
     border-width: 3px;
     border-style: dashed;
     box-sizing: content-box;
@@ -22,9 +64,6 @@
     padding-left: 20px;
 }
 
-p{
-    font: poppins-regular
-}
 
 
 h1{
@@ -32,11 +71,19 @@ h1{
     background-color: papayawhip;
     color: black;
     border-radius: 10px;
+    font: quicksand-font;
 
     padding:10px;
     margin:20px;
 }
 
+careerAuth {
+  color:red
+}
+
+techAuth {
+  color: blue
+}
 
 #header{
     background-color: papayawhip;
@@ -49,11 +96,11 @@ h1{
 
 
 article{
-    background-color: peachpuff;
+    background-color: white;
     color: black;
     border-radius: 10px;
-    padding:20px;
-    margin:20px;
+    padding:2%;
+    margin:2%;
 }
 
 
@@ -79,9 +126,11 @@ td {
 
 
 body {
-    background-color:cornsilk;
-    padding-right:20%;
-    padding-left:20%;
+    background-image: url("assets/bg.jpeg");
+    background-repeat: no-repeat;
+    background-color: gray;
+    padding-right:10%;
+    padding-left:10%;
     color: black;
     font-size: 25px;
   }

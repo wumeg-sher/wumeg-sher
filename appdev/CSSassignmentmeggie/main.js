@@ -163,7 +163,7 @@ introPassage.textContent = titleContent.introP;
 
 
 //function to build articles 
-function createArticle (articleInfo) {
+function createArticle (articleInfo, articleType) {
     let container = document.createElement("article");
         let titleName = document.createElement("h2");
         titleName.textContent = articleInfo.title;
@@ -179,7 +179,17 @@ function createArticle (articleInfo) {
         urlName.href = articleInfo.localURL;
         container.appendChild(urlName)
 
-        let authorName = document.createElement("p");
+        let authorName ;
+        console.log(articleType)
+        if (articleType === "Career") {
+            authorName = document.createElement("careerAuth")
+            console.log("career");
+        } else if (articleType === "Technical") {
+            authorName = document.createElement("techAuth");
+            console.log("technical")
+        } else {
+            authorName = document.createElement("p");
+        }
         authorName.textContent = articleInfo.author;
         container.appendChild(authorName)
 
@@ -194,7 +204,7 @@ function createArticle (articleInfo) {
 
 //setting featured article
 let articleContainer = document.querySelector("#featArticle");
-articleContainer.appendChild(createArticle(featuredArticle[0]))
+articleContainer.appendChild(createArticle(featuredArticle[0]), "feed")
 
 
 
@@ -207,7 +217,8 @@ for (let i=0; i<categoryArticles.length; i++){
     sectionHeading.textContent = categories[i];
     section.appendChild(sectionHeading);
     for (let j=0; j<categoryArticles[i].length; j++){
-        section.appendChild(createArticle(categoryArticles[i][j]))
+        section.appendChild(createArticle(categoryArticles[i][j], categories[i]))
+
     };
     sectionContainer.appendChild(section);
 }
