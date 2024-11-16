@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-content: center;
  }
 
 
@@ -26,42 +27,56 @@ section{
   display: flex;
   flex-direction: row;
   justify-content: center;
+  padding-bottom: 10%;
 }
 
-@media ((max-width: 800px)) {
-  #articleCategories {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  } 
+
+p{
+  color: black;
+  font-size: 16px;
 }
+
 
 #feed {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-right:10%;
+  padding-left:10%;
 }
 
 img {
   width: 100%;
 }
 
-p{
-  color: black;
-  font-family: "Quicksand", sans-serif;
+
+
+#introPara{
+  background-color: papayawhip;
+  border-radius: 10px;
+  border: 5%;
+  padding: 2%;
+  margin-right:10%;
+  margin-left:10%;
+
 }
 
 
+
+
 #footer{
+    font-size: 1.5em;
     background-color: whitesmoke;
     border-width: 3px;
     border-style: dashed;
     box-sizing: content-box;
-    border-radius: 10px;
-    margin:20px;
+
     padding-bottom: 20px;
     padding-left: 20px;
+    width: 100vw;
+    position: relative;
+    left: 30px;
 }
 
 
@@ -71,27 +86,44 @@ h1{
     background-color: papayawhip;
     color: black;
     border-radius: 10px;
-    font: quicksand-font;
 
-    padding:10px;
-    margin:20px;
+    padding:2%;
+    margin-left:30%;
+    margin-right: 30%;
+    margin-bottom: 5%;
+}
+
+feat {
+  font-size: 20px;
+  white-space: pre-line;
 }
 
 careerAuth {
-  color:red
+  background-color: purple;
+  color:white;
+  border-radius: 5px;
 }
 
 techAuth {
-  color: blue
+  background-color: black;
+  color: white;
+  border-radius: 5px;
 }
 
 #header{
+    font-size: 1.5em;
+    display: flex;
+    flex-direction: row;
     background-color: papayawhip;
     color: black;
-    border-radius: 10px;
+    padding: 2%;
+    width: 100vw;
+    position: relative;
+    left: 30px;
+}
 
-    padding:10px;
-    margin:20px;
+#cat{
+  width: 30%;
 }
 
 
@@ -102,6 +134,17 @@ article{
     padding:2%;
     margin:2%;
 }
+
+
+
+
+#content{
+  background-color: white;
+  border-radius: 10px;
+  padding:2%;
+  margin:2%;
+}
+
 
 
 
@@ -123,15 +166,34 @@ td {
 }
 
 
-
+input[type="text"] {
+  border:2px solid red;
+}
 
 body {
     background-image: url("assets/bg.jpeg");
     background-repeat: no-repeat;
     background-color: gray;
-    padding-right:10%;
-    padding-left:10%;
-    color: black;
-    font-size: 25px;
+
+    font-family: "Quicksand", "sans-serif";
   }
+
+
+  @media ((max-width: 800px)) {
+    #articleCategories {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    } 
+  
+    #cat{
+      width: 20%;
+    }
+  
+    p{
+      font-size: 22px;
+      line-height: 150%;
+    }
+  }
+  
   

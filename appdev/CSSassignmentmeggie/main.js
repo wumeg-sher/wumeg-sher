@@ -180,22 +180,31 @@ function createArticle (articleInfo, articleType) {
         container.appendChild(urlName)
 
         let authorName ;
-        console.log(articleType)
         if (articleType === "Career") {
             authorName = document.createElement("careerAuth")
-            console.log("career");
         } else if (articleType === "Technical") {
             authorName = document.createElement("techAuth");
-            console.log("technical")
+        } else if (articleType === "feat") {
+            authorName = document.createElement("feat");
         } else {
             authorName = document.createElement("p");
         }
         authorName.textContent = articleInfo.author;
+        container.appendChild(document.createElement("br"))
         container.appendChild(authorName)
 
-        let previewName = document.createElement("p");
+
+        let previewName;
+        if (articleType === "feat") {
+            previewName = document.createElement("feat"); 
+         } else {
+            previewName = document.createElement("p");
+        }
         previewName.textContent = articleInfo.previewText;
+        container.appendChild(document.createElement("br"))
         container.appendChild(previewName)
+
+
 
     return container;
 };
@@ -204,7 +213,7 @@ function createArticle (articleInfo, articleType) {
 
 //setting featured article
 let articleContainer = document.querySelector("#featArticle");
-articleContainer.appendChild(createArticle(featuredArticle[0]), "feed")
+articleContainer.appendChild(createArticle(featuredArticle[0], "feat"))
 
 
 
