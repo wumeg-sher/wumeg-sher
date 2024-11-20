@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Sheridan Interactive Media - IC Build Exam 2023</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type=module>
+
+import zim, {makePattern} from "https://zimjs.org/cdn/017/zim_pizzazz";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    
+    // Welcome to the 2023 IC Build Exam - 3 hours.
+    // Please use ZIM and the Docs without other references or communication.
+    // Note the docs for items used links at the bottom.
+    // You are welcome to ask if you get really stuck 
+    // and perhaps we can offer a little advice.
+    
+    // You should be able to do part 1, 2 and 3 independently.
+    // Part 4 will require elements from part 2 and 3 stored as variables.
+    // Part 4 will also probably take half your time and is the hardest part.
+    // Note the marks for the sections are 4 + 5 + 5 + 6 = 20 total.
+    
+    // Try and make the app as close to the video example as possible
+    // but things like colors, corner radii, border width, etc. does not really matter.
+        
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // part1 - Pane - 4 Marks
+    
+    part1();
+    function part1() {
+        
+        // 1. Use makePattern() to make stripes centered on the stage.
+        // Note: since we imported makePattern,
+        // we can just use makePattern() without the pizzazz in front
+        // Look up in the docs to see the parameters.     
+        
+        makePattern({type: "stripes", 
+            colors: white,
+            size: 20,
+            cols: 60,
+            rows: 40,
+            spacingH: 1
+            }
+        )
+        .center();
+    
+        
+        // 2. Create a Pane() with "Drag circles to tiles" 
+        // make the backdrop be black with alpha of .5 
+        // skew the pane 10 in the x 
+        // use the callback function of show() to go to part2       
+        
+        new Pane({content: "Drag circles to tiles",
+                backdropColor: black.toAlpha(.5)})
+                .show(part2)
+                .ske(10);
+        
+        
+    } // end part1
+
+
+
+
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // part2 - Circles - 5 Marks
+    
+    let circles;
+    function part2() {
+        
+        // 3. Make a Container(W,H) called circles (note, already declared above)
+        // and centerReg it on stage, make it draggable (so each circle will drag) 
+        // scale it to 0 and animate the scale to 1 with snapOut ease.
+        // Call part3 when the animation is done.    
+        
+        circles = new Container(W,H)
+            .centerReg()
+            .drag()
+            .sca(0)
+            .animate({
+                props: {scale:1}, 
+                ease:"snapOut", 
+                call: part3
+            });
+        
+        
+            
+        // 4. Create four circles 50 in diameter and darkened red, blue, purple and green 
+        // position them 50 pixels from the sides in the corners of circles.
+
+        new Circle(50, red.darken(.2)).pos(50,50,LEFT, TOP, circles)
+        new Circle(50, blue.darken(.2)).pos(50,50,RIGHT, TOP, circles)
+        new Circle(50, purple.darken(.2)).pos(50,50,LEFT, BOTTOM, circles)
+        new Circle(50, green.darken(.2)).pos(50,50,RIGHT, BOTTOM, circles)
+        
+        
+        // 5. Loop through the circles and record a startX and startY property for each.
+        // This is a custom property, you will not find it in the docs.
+        
+        loop (circles, (circle)=>{
+            circle.startX = circle.x;
+            circle.startY = circle.y;
+        }); 
+        
+        
+    } // end part2 
+    
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Part 3 - Cards - 5 Marks
+    
+    let card;
+    let front;
+    let back;
+    function part3() { // make the Flipper...
+        
+        // 6. Create a front that is a Tile of four rounded corner rectangles 150x150 
+        // make sure their reg() is centered and space them 20 pixels from each other.  
+        // Note that front is declared above.     
+
+        const square = new Rectangle(150,150, white, black, 1, 10).reg(CENTER)
+        front = new Tile (square, 2, 2, 20, 20)
+        
+        
+        // 7. Create a back that is a Container with a Rectangle 350x350 with rounded corners
+        // and a Poly() with radius 150, 5 sided star - center it and move it down 8 pixels 
+        // then center a Label() that says "PASS".
+        // Note that back is declared above.
+
+        back = new Container(W,H)
+        new Rectangle(350,350, white, black, 1, 10).center(back)
+        new Poly(150, 5, .6).center(back)
+        
+            
+        // 9. Make a Flipper() of the front and back centerReg 
+        // Store the flipper in the variable called card (already declared above)
+        // We want the flipper to not recieve any mouse events to start.
+        // Make the flipper be under the circles and animate in as shown with a backOut ease.
+        // The animation should wait .3 seconds and call part4 when done.
+
+        card = new Flipper(front, back, true)
+            .centerReg()
+            .ord(-1)
+            .sca(0)
+            .noMouse()
+            .animate({
+                props: {rotation: 360, scale:1},
+                time: 1.5,
+                ease: "backOut",
+                wait: .3,
+                call: part4
+            })
+        
+              
+    }
+    
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Part 4 - Interaction - 6 Marks
+    
+    function part4() {
+        
+        // 10. When we mousedown on the circles set the shadow as shown.   
+        
+        circles.on("mousedown", (e)=>{
+            e.target.sha();
+        });
+        
+        // 11. When we pressup on the circle do all the following:    
+        
+        circles.on("pressup", (e)=>{
+            const circle = e.target;
+        
+            // HINT: Remember your e.target... would suggest storing this as const circle.
+            // A. remove the shadow from the selected circle.
+            // From now on, we refer to the selected circle just as circle.
+
+            circle.sha(-1);
+            S.update();
+
+            // B. make the circle have no mouse events
+            
+            circle.noMouse();
+
+                   
+            
+            // C. ZIM loop() through the front and each time get the rect 
+            // Assign the loop() to a variable called answer
+            // D. In the loop test to see if the circle is hitting the registration of the rect 
+            // and the rect is not full (see Part F. below)  
+
+            let answer = loop(front, (square)=>{
+                if (square.hitTestReg(circle)==true && square.full!=true){
+                    circle.center(square);
+                    square.full = true;
+                    S.update();
+                    return "placed";
+                } //end of if
+
+
+            }) //end of loop
+            
+
+                
+                    // E. If this is the case then locate the circle at the rect and INSIDE the rect 
+                    // (so the circle will no longer be in circles but rather in the rect)                    
+        
+                    // F. And set a full property of the rect to true.
+                    // This is a made up property - so you will not find it in the docs.
+                    
+                    // G. Update the stage and return "placed"; 
+                    // This will exit the loop and put the word "placed" into answer (of Part C. above).
+                
+            
+            // H. Outside the loop but still inside the pressup event 
+            // if the answer is not "placed" (remember your !=)
+            // then animate the circle back to its startX and startY 
+            // and when done the animation 
+            // set the mouse events back on circle (important!)
+
+            if (answer != "placed"){
+                circle.animate({
+                    props: {x:circle.startX, y:circle.startY}
+                })
+                circle.mouse();
+            }
+
+
+
+            
+            
+            // I. If the numChildren of the circles container is 0 
+            // we are done so do the following steps: 
+
+            // J. Add a timeout of 1 second to call an arrow function
+            // K. In the arrow function, flip() the card
+                    
+
+            if (circles.numChildren ==0){
+                timeout(1, ()=>{
+                    card.flip()
+
+                // L. Call another timeout of 1 second and an arrow function  
+                // M. In the arrow function, 
+                // set the mouse events back on card so we can use the flipper.
+
+                timeout(1, ()=>{
+                    card.mouse()
+
+                    // N. Also in the arrow function, make an Emitter() 
+                    // that emits the same Poly (as the star) but clear in color 
+                    // and a borderColor of red, green, purple, or blue with borderWidth 3
+                    // set gravity to false (or 0) and a force of 8 
+                    // start the emitter paused
+                    // then center the emitter on the stage and spurt() 30 times!
+                    const colours = [red, green, purple, blue]
+                    const star = new Poly (150, 5, .6, clear, colours, 3)
+                    new Emitter({
+                        obj: star,
+                        gravity: false,
+                        force: 8
+                    }).center().spurt(30)
+                        
+                        
+                        // O. Your final bracket check would look like this:
+                        // end the inner timeout
+                        // end the outer timeout 
+                        // end the numChildren conditional 
+                        // end the pressup event       
+                        
+                        
+                    }) //end of inner timeout 
+                }) //end of outer timeout
+            } //end numChildren conditional 
+        }); //end of pressup
+                    
+        
+    } // end part4  
+    
+    // 12.  You are done.  Please comment below how you think you did.
+    
+    
+    
+    
+    // Docs for items used:
+    // https://zimjs.com/docs.html?item=Frame
+    // https://zimjs.com/docs.html?item=Container
+    // https://zimjs.com/docs.html?item=Circle
+    // https://zimjs.com/docs.html?item=Rectangle
+    // https://zimjs.com/docs.html?item=Poly
+    // https://zimjs.com/docs.html?item=Label
+    // https://zimjs.com/docs.html?item=Pane
+    // https://zimjs.com/docs.html?item=drag
+    // https://zimjs.com/docs.html?item=mouse
+    // https://zimjs.com/docs.html?item=noMouse
+    // https://zimjs.com/docs.html?item=hitTestReg
+    // https://zimjs.com/docs.html?item=animate
+    // https://zimjs.com/docs.html?item=loop
+    // https://zimjs.com/docs.html?item=sha
+    // https://zimjs.com/docs.html?item=pos
+    // https://zimjs.com/docs.html?item=loc
+    // https://zimjs.com/docs.html?item=mov
+    // https://zimjs.com/docs.html?item=ord
+    // https://zimjs.com/docs.html?item=ske
+    // https://zimjs.com/docs.html?item=reg
+    // https://zimjs.com/docs.html?item=sca
+    // https://zimjs.com/docs.html?item=addTo
+    // https://zimjs.com/docs.html?item=centerReg
+    // https://zimjs.com/docs.html?item=center
+    // https://zimjs.com/docs.html?item=Tile
+    // https://zimjs.com/docs.html?item=Flipper
+    // https://zimjs.com/docs.html?item=Emitter
+    // https://zimjs.com/docs.html?item=timeout
+    // https://zimjs.com/docs.html?item=series
+    // https://zimjs.com/docs.html?item=darken
+    // https://zimjs.com/docs.html?item=toAlpha
+    // https://zimjs.com/docs.html?item=makePattern
+        
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

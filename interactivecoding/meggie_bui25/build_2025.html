@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Sheridan IC - 2025 Build Test</title>
+
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+
+    <script type=module>
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, lighter, black, ready, ["smoke.png", "gf_Joti+One"], "assets/");
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+
+    // Welcome to the Sheridan Interactive Coding 1 Build Test.
+    // We have given you the parameters in the correct order 
+    // but if you feel you need to use the docs, you may.
+    // https://zimjs.com/docs.html
+
+    // Please avoid looking at other examples and no communication.
+    // DO NOT USE AI - that is a 0 - it is NOT worth it.
+    // You are welcome to ask the Professor questions
+    // and if you get stuck they may be able to give a hint.
+
+    // SEE the included video of the app
+
+    // Marks for the questions are in [marks]
+    // There are 25 questions with a total of 50 marks
+
+    // It took me 75 minutes to read each question and answer (did not look at Docs)
+    // APPROXIMATE BREAKDOWN
+    // 1,   2,   3,   4,   5    - PART
+    // 60,  20,  20,  60,  20   - MINUTES OUT OF 3 HOURS
+    // 32%, 12%, 12%, 32%, 12%  - APPROX TIME
+    // 32%, 14%, 16%, 22%, 14%  - MARKS
+
+
+    // PART 1
+    // In part 1 we make the first scene with a wire, plug and socket 
+    // we drag the plug to the socket to go to the next scene
+
+    // 1.  Make a Rectangle WxH (width and height of stage) and F.color 
+    // store it in a variable called backdrop and addTo() so all the parts can access it.  [1]
+
+    const backdrop = new Rectangle(W,H,F.color).addTo();
+
+
+
+    // these variables will be used across parts 
+    // when assigning them in the parts, DO NOT use const or let, just assign them
+    // there may also be other variables above some of the other parts
+    let scene;
+    let wire;
+    let plug;
+    let boundary;
+
+    function part1() {  
+
+        // 2. Store a Container WxH in the already-existing scene variable - DO NOT use const or let    [1]
+        // add the scene to the stage with addTo() 
+
+        scene = new Container (W,H).addTo();
+        
+
+        // 3. Set a STYLE of interactive:false - remember that STYLE receives a {}    [2]
+        // then store a Squiggle in the already-existing wire variable
+        // The squiggle should have a color of black, thickness of 10, points of 50 and length of 2000 (these are the first four parameters)
+            // chain on a reversePoints() method so the points start at the right side 
+            // set the reg() to LEFT and CENTER so it will stretch from the left 
+            // and pos() the squiggle at W/2, 200, RIGHT and BOTTOM in the scene 
+            // (make sure to pass scene in as last parameter of pos)
+
+        STYLE = {interactive: false};
+            
+        wire = new Squiggle(black, 10, 50, 2000)
+        .reversePoints()
+        .reg(LEFT, CENTER)
+        .pos(W/2, 200, RIGHT, BOTTOM, scene);
+
+        // 4. Set the STYLE to percent:60 and once:true    [1]
+        // then store a Circle of radius 50 in the already-declared variable, plug.
+        // The circle will only be 60% the full circle because of the style - but this points down
+        // so rot() -90 to point to the right and loc() the wire at an x and y as follows:
+            // x: the x of the wire   plus   the width of the wire         plus   25 
+            // y: the y of the wire   plus   half the height of the wire   minus  20 
+        // and make sure to loc it in the scene (the third parameter should be scene)
+        
+        STYLE = {percent:60, once:true};
+        plug = new Circle(50).rot(-90);
+        plug.loc(wire.x+wire.width+25, wire.y+wire.height/2-20, scene);
+
+        // 5. Store a new Boundary() in the already-declared variable, boundary.   [1]  
+        // Make it have four parameters:  100,   the y of the plug,   W-235,   0  
+        // add a drag() to the plug with onTop:false and boundary:boundary
+        
+        boundary = new Boundary(100, plug.y, W-235, 0);
+        plug.drag({onTop:false, boundary:boundary});
+
+        // 6. Make a variable called prong and store a new Rectangle() 15x60 center() on the plug and mov() -20,40   [1]
+        // Make another Rectangle() 15x60, center() on plug and mov() 20,40 
+        // This will make the two prongs, remember that the plug is rotated so these rectangles will be rotated too
+        
+        const prong = new Rectangle(15, 60).center(plug).mov(-20,40);
+        new Rectangle(15, 60).center(plug).mov(20, 40);
+
+        // 7. Make a Rectangle() 100xH and pos() it 0,0,RIGHT,TOP in the scene.  This is a wall on the right side.   [1]
+        // Then make a socket variable that holds a new Rectangle() 20x250, orange, black, 4, and [20,0,0,20] as the corner 
+        // pos() this 98,100, from the RIGHT,BOTTOM, in the scene.
+
+        new Rectangle(100,H).pos(0,0,RIGHT,TOP, scene);
+        const socket = new Rectangle(20,250,orange,black,4,[20,0,0,20]).pos(98,100,RIGHT, BOTTOM, scene);
+        
+
+        // 8. Make a new Label that says "PLUG ME!", size 160, and the "Joti One" font  [2]        
+            // centerReg() on the scene
+            // rot() it -20 and move() -60,-150
+            // set the sha() to black.toAlpha(.3), 6, 6, and 0 
+            // and wiggle() the "scale" starting at 1, a min of .02, a max of .05, in min time of 2 (the max will match)
+
+        new Label("PLUG ME!", 160, "Joti One")
+            .centerReg(scene)
+            .rot(-20)
+            .mov(-60,-150)
+            .sha(black.toAlpha(.3), 6, 6, 0)
+            .wiggle("scale", 1, .02, .05, 2);
+        
+
+        // 9. Store a new Arrow() with backgroundColor:black and type:"thick" in a variable called, arrow           [1]
+            // set the noMouse(), the alp() to .2, the sca() to 9, the reg() to CENTER, loc() at the plug and mov() 35 
+            // then wiggle() the "rotation" about 0, a min of 3, max of 5, in a min time of .5, and max time of 1 
+
+        const arrow = new Arrow({backgroundColor:black, type:"thick"})
+            .noMouse()
+            .alp(.2)
+            .sca(9)
+            .reg(CENTER)
+            .loc(plug)
+            .mov(35)
+            .wiggle("rotation", 3, 5, .5, 1);
+        
+
+
+        // 10. THREE EVENTS ALL ON PLUG   [6]
+        
+        // A. Use on() to add a "mousedown" event to plug that will call an arrow function 
+        // inside the arrow function dispose() the arrow 
+        // Set the third and fourth parameters of the on() to null, true 
+        // so that this event only runs once        
+
+        plug.on("mousedown", ()=>{
+            arrow.dispose()
+        }, null, true); //end of mousedown
+       
+       
+        // B. Add a "pressmove" event to plug that will call an arrow function 
+        // inside the arrow function set the widthOnly property of the wire to 
+        // the x of the plug    minus   the x of the wire    minus   25 
+        // This will constantly make the wire stretch to the plug
+
+        plug.on("pressmove", ()=>{
+            wire.widthOnly = plug.x-wire.x-25
+        }); //end of pressmove
+        
+
+        // C. Add a "pressup" event to the plug that will call an arrow function 
+        // inside the arrow function test if the prong (the first rectangle added to the plug)
+        // is hitTestBounds() the socket and if it is call part2()
+
+        plug.on("pressup", ()=>{
+            if (prong.hitTestBounds(socket)) {part2()
+            }
+        }); //end of pressup
+        
+
+    } //end of part1
+
+    // Call part1() - comment this out if you want to directly call other parts
+   part1();
+
+
+    // PART 2
+    // In part 2, we snap the plug into the socket and animate the scene to the right 
+    // We also add a little ball of electricity that animates along the wire 
+    // and ends in an emitter to introduce the second scene in part 3
+
+    function part2() {    
+
+
+        // 11. We want to snap the plug to the socket.       [1]
+        // We already know that the plug should be at the right of the Boundary when plugged in.
+        // So, set the x of the plug to   the x of the boundary   plus   the width of the boundary 
+        // Set the widthOnly property of the wire to   the x of the plug   minus the x of the wire   minus   25
+        // and set the plug to noMouse()
+
+        plug.x = boundary.x+boundary.width;
+        wire.widthOnly = plug.x-wire.x-25;
+        plug.noMouse();
+
+        
+
+        // 12. make a new Circle() that is 15 in radius, yellow, with a black border of 8 width   [4]
+        // addTo() the scene at the bot() and then ord() of 1 to bring it above the wire
+        // IMPORTANT - make sure you addTo() the scene (not just the stage)
+        // then animate() with props of {path:wire}, time of 6, ease of "linear", and call of target=>{}
+
+        new Circle (15, yellow, black, 8)
+            .addTo(scene)
+            .bot()
+            .ord(1)
+            .animate({
+                props:{path:wire},
+                time: 6,
+                ease: "linear",
+                call: target=>{
+
+            // A. inside the animate call arrow function, make a new Emitter() emit the target (which is the little yellow circle)
+            // and loc() it at the target and spurt() 10 
+                    new Emitter(target)
+                    .loc(target)
+                    .spurt(10);
+
+            
+            // B. then dispose() the target 
+           
+                    target.dispose();
+            
+            // C. tell a timeout() of 1 second to call part3 
+
+                    timeout(1, part3)        
+
+                } //end of call
+            }) //end of animate
+                
+            
+
+        // 13. outside the animate call do two more animations   [2]
+        // these will move and darken the scene as the little yellow circle animates
+        
+        // A. animate() the scene's x property to   W/2  minus  the wire.x   in 6 seconds
+
+        scene.animate({
+            props: {x: W/2 - wire.x},
+            time: 6
+        });
+        
+        // B. animate() the backdrop to a color of black in 5 seconds
+
+        backdrop.animate({
+            props:{color:black},
+            time: 5
+        })
+        
+
+    }
+
+
+    // PART 3 
+    // In this part we create the magic lamp
+    // Note: the shield variable that will be used across several parts
+
+    // IMPORTANT
+    // This part can easily be made to run on its own 
+    // You can comment out the part1() above 
+    // and comment in the part3() below this function 
+    // I would suggest you do this now so you avoid part 1 and 2 as you build and test
+
+    let shield;
+    function part3() {
+
+
+        // part2 should have already animated the backdrop to black 
+        // but when doing this part on its own, we can set the color property of the backdrop to black
+        // it does no harm to just leave this here always
+       
+        backdrop.color = black;
+
+        // 14. A. Create a variable called scene2 so it holds a new Container WxH addTo() the stage and set noMouse()  [1] 
+        // We set noMouse() because nothing in this scene is interactive and noMouse will improve performance
+        // B. Add a varible called lamp that holds a new Circle() with radius H*.45 and color white then center() it in scene2
+
+        const scene2 = new Container(W, H).addTo().noMouse();
+        const lamp = new Circle(H*.45, white).center(scene2);
+        
+
+        // 15. Create a new Emitter and store it in a variable called smoke  [2]
+        // center() the smoke on scene2
+        // Use the ZIM DUO configuration object as follows to make the Emitter:
+                // obj:new Sprite()
+            // The Sprite receives a first parameter of a new Pic() that is the "smoke.png"
+            // The second and third parameters of sprite are 4, 4 - because there are 4 columns and 4 rows 
+            // sca() the sprite 8 and set its alp() to .4 - make sure you do these on the Sprite, not the Pic
+        
+        // The rest of the emitter parameter properties are as follows:
+        // gravity:0,
+        // interval:.1,
+        // num:3,
+        // force:1,
+        // fade:false,
+        // life:5,
+        // layers:BOTTOM,
+        // warm:true
+        
+        // IMPORTANT - when testing, we now have an image - close all browsers and use your special Chrome shortcut  or use live server.
+     
+        
+        const smoke = new Emitter({
+            obj: new Sprite(new Pic("smoke.png"), 4, 4).sca(8).alp(.4),
+            gravity:0,
+            interval:.1,
+            num:3,
+            force:1,
+            fade:false,
+            life:5,
+            layers:BOTTOM,
+            warm:true
+        })
+            .center(scene2);
+
+
+        // 16. On the particles property of the smoke, setMask() to the lamp    [1]
+        // in other words smoke dot particles dot setMask() and lamp inside the round brackets ;-)
+        // This will only show the particles inside the circle of the lamp
+
+        smoke.particles.setMask(lamp);
+        
+
+        // 17. Make a circular vignette around the lamp    [1]
+        // Make a new Circle() with lamp radius, a color of new RadialColor([clear, white.toAlpha(.8)])
+        // and a white borderColor with 3 borderWidth 
+        // center() it in scene2
+
+        new Circle(lamp.radius, new RadialColor([clear, white.toAlpha(.8)]), white, 3).center(scene2);
+        
+
+
+        // 18. Make the lamp base  [2] 
+        
+        // A. Store in a variable, base, a new Flare() that is pos() 0,30, CENTER, BOTTOM, in scene2 
+        // The flare has the following configuration: 
+            // thickness:460, 
+            // angles:90, 
+            // lengths:70, 
+            // borderColor:grey, 
+            // borderWidth:3, 
+            // color:new GradientColor([silver,moon,silver],[0,.5,1],-240,0,240,0)
+
+        const base = new Flare({
+            thickness:460, 
+            angles:90, 
+            lengths:70, 
+            borderColor:grey, 
+            borderWidth:3, 
+            color:new GradientColor([silver,moon,silver],[0,.5,1],-240,0,240,0)
+        })
+            .pos(0,30,CENTER,BOTTOM, scene2);
+
+
+        // B. Make a Label of "M E M O R I Z E", 40 in size, font of "Joti One", and color dark
+        // center() the label in the base
+
+        new Label("M E M O R I Z E", 40, "Joti One", dark).center(base)
+        
+
+        // 19.  Store in the already-declared variable, shield, a new Rectangle()         [1]
+        // WxH and addTo() and animate() the alpha to 0 in 2 seconds
+        // then use null for the default ease and have it call part4 (do not use part4(), just part4)
+
+        shield = new Rectangle(W, H)
+            .addTo()
+            .animate({
+                props: {alpha:0},
+                time: 2,
+                ease: null, 
+                call: part4
+            });
+
+
+    }  //end of part 3
+
+    // uncomment this to run part3() directly - if you do, comment out any calls to other parts
+    //part3();
+
+
+    // PART 4 
+    // In part 4, we create cards and animate cards from an interval 
+    // Note: this part runs again, each time the player answers correctly or tries again
+    // We will increase the num each time the player answers correctly up to a num of 8
+    
+    // IMPORTANT - part 4 can be done without part 3 
+    // so you can comment out any previous part calls and uncomment part4() below this function.
+
+    let cards;
+    let num = 2;
+    function part4() {
+
+
+        // 20. Prepare the content of the cards   [1]
+        // A. add red, orange, green, blue, yellow, pink to an array called, colors
+
+        const colors = [red, orange, green, blue, yellow, pink];
+
+        // B. add new Rectangle().sca(.8), new Circle().sca(.9), new Triangle(), new Poly(), new Circle({percent:60, percentArc:30}).rot(-90)
+        // to an array called, shapes
+
+        const shapes = [new Rectangle().sca(.8), new Circle().sca(.9), new Triangle(), new Poly(), new Circle({percent:60, percentArc:30}).rot(-90)];
+        
+
+        // 21. We want random cards made from the colors and the shapes but we do not want to repeat a combination.      [3]
+        // We will prepare an array of indexes 
+        // like [[0,0], [0,1], [0,2]... [5,2], [5,3], [5,4]] that has all the combinations
+        // Then in the next step, we will pluck from these to get unique combinations.
+
+        // A. create an empty array called options
+
+        const options = new Array;
+
+        // B. ZIM loop the length of colors and each time get i in an arrow function (or can use for loop if desired)
+            // C. inside the arrow function loop the length of shapes and get j in an arrow function
+            // D. inside this inner arrow function, push [i,j] into the options array
+                
+
+        for (let i=0; i<colors.length; i++) {
+            for (let j=0; j<shapes.length; j++){
+                options.push([i,j])
+            }
+        };
+
+        //zog(options)
+        // E. outside both loops, zog(options) to make sure it looks like the example above
+        // comment this out once you have seen you have the correct results
+
+        
+
+        // 22. Here we are going to make the cards    [3]
+        // A. In the already-declared variable, cards, store an empty array
+
+        cards = new Array;
+        
+
+        // B. in the already-existing variable, num, assign Math.min(num+1, 8)
+        // this will increase the num and take the minimum value between that and 8 
+        // remember, part4 can be run many times by the player
+        // and the num will start at 3 and never be bigger than 8
+
+        num = Math.min(num+1, 8);
+
+        // C. loop num times and get i in an arrow function
+            // D. inside the arrow function, we will get one of the options from the options array.
+            // Store in a variable called option (singular), the result of a pluck() function 
+            //      The first parameter of pluck() is the options (plural) array 
+            //      The second parameter of pluck() is true which will actually remove the item from the array 
+            //      (we want to remove the items so that we will not duplicate this combination)
+            // option will now hold an array like [2,4] or [4,1] that represent [the color index, the shape index]
+            // zog(option) to these arrays
+
+            loop(num, i=>{
+                const option = pluck(options, true);
+                //zog(option);
+
+            // E. We now will use our two indexes to get a color and shape from the colors and shapes arrays. 
+            // Store a variable, color, that gets the colors array at the first index of the option
+            //      Hint: in other words: the color is colors at option at 0
+            //      where "at" means [] - the Array access operator
+            //      SPOILER: color is colors[option[0]] 
+            // Store a variable shape that gets the shapes array at the second index of the option
+            // Apply the hint above but this time use shape, shapes and option 1
+
+                const color = colors[option[0]];
+                const shape = shapes[option[1]];
+            
+            // F. in a variable called card, store a new Rectangle() with 200,300,color,black,2,20
+            // note how we use the chosen color
+
+                const card = new Rectangle(200,300, color, black, 2, 20)
+            
+            // G. we have the shape stored in shape and want to add the shape to the card 
+            // BUT... the same shape may be used on a different card (with a different color)
+            // So we must clone() the shape before putting it in our rectangle.
+            // clone() the shape and center() it in the card. 
+            // Note, shape is the object and clone() is the method then chain on center() in the card
+                
+                shape.clone().center(card);
+            
+            // H. push() the card into the cards array.  
+            // Hint: cards is the object, push() is the method, and card is the parameter value
+
+                cards.push(card);
+           
+        }); // end of num loop
+
+        // I. outside the loop, zog(cards) to make sure you have a some Rectangles
+        // comment this out once you have seen you have the correct results
+
+        //zog(cards);
+
+
+        // 23. Animate the cards spinning different directions and getting bigger in an interval    [4]
+        // The cards animate again at the end to fade out
+        // A. store a series() 360,-360 in a variable called, spins
+        // Note: series() is just a function, not a Class (so no new keyword), not a method (so no object before it)
+
+        const spins = series(360, -360)
+       
+        // B. make an interval() of 3 seconds call an arrow function that receives an interval object as obj
+        // note - this is like collecting an event object as e in an on() method. 
+        // The obj gives us extra information about the interval, like what count we are on.
+        // AFTER the arrow function add these two parameters: num, true          
+        // (these will run the interval num times and start right away)
+
+        interval(3, obj=>{
+
+
+            // C. inside the arrow function access the cards array at obj.count
+            // again, "at" means to use [] the array access operator
+            // this will give you a card each interval
+                // D. then apply the following methods to the card
+                // .centerReg()
+                // .cache()
+                // .ble("color-burn") // Note: this makes the card lighter if on white and invisible if on black - so maybe leave commented until the end
+                // .alp(0)
+                // .sca(0)
+
+            cards[obj.count]
+                .centerReg()
+                .cache()
+                .ble("color-burn") // Note: this makes the card lighter if on white and invisible if on black
+                .alp(0)
+                .sca(0)
+
+                // E. also animate the card as follows:
+                    // props:{scale:1, alpha:1, rotation:spins}, 
+                    // time:2, 
+                    // ease:"backOut",
+                
+                .animate({
+                    props:{scale:1, alpha:1, rotation:spins}, 
+                    time:2, 
+                    ease:"backOut",
+                    call: (obj)=>{
+                        obj.animate({
+                            props:{alpha:0}
+                        })
+                    } //end of call
+                }); //end of animate 
+                   
+                    // F. and call an arrow function that receives a target parameter
+                    // inside the arrow function animate the target to an alpha of 0
+
+        // IMPORTANT
+        // F. add three more parameter values to the interval:
+        // null, null, and an arrow function for when the interval is done num times 
+        // G. inside the arrow function make a timeout() of 3 seconds and tell it to call part5 (do not use part5() but just part5)
+   
+        }, num, true, null, null, ()=>{
+            timeout(3, part5)
+        }); //end of interval
+    }
+
+    // uncomment this run just part4 - you may need to comment out other part calls.
+    // part4();
+
+
+
+    // PART 5 
+    // Almost there!
+    // Here we set up a Scrambler() with the cards made from part 4. 
+    // You can comment out the other part calls and uncomment part5() below to run this part on its own 
+    // Note the instructions at the start if running only this part
+
+    function part5() {
+
+        // ONLY FOR RUNNING THIS PART ON ITS OWN
+        // if you are running only this part, then you need a shield and a cards array
+        // The shield is used to hide the other parts so does nothing if doing this part alone.
+        // Only add these two lines if you are doing this part on its own - otherwise, leave them commented.
+        // shield = new Rectangle(W,H).alp(0).addTo(); 
+        // cards = [new Rectangle(200,300,red,darker,3,20), new Rectangle(200,300,orange,darker,3,20), new Rectangle(200,300,blue,darker,3,20)];
+        
+
+
+        // 24. We want to hide the other parts.     [1]
+        // animate() the shield alpha to 1 in .5 seconds, null for ease, and an arrow function for the call parameter
+
+        shield.animate({
+            props:{alpha:1},
+            time:.5,
+            ease: null, 
+            call: ()=>{
+
+            // 25. inside the arrow function make everything for this part  [6]
+            // A.  We need to reset the cards back to normal after they were animated in part 4 
+            // loop through the cards array and get a card as the parameter for an arrow function
+                // inside the arrow function set the card alp() 1, sca() 1, and ble() "normal"
+                // this will reset all the cards so they look right in the Scrambler     
+                
+                loop(cards, card=>{
+                    card.alp(1)
+                        .sca(1)
+                        .ble("normal")
+                }) //end of loop 
+                
+            // B. store in a variable called scrambler a new Scrambler()
+            // this will receive a single parameter that is a new Tile() with the parameters: cards, cards.length, 1, 20, 20, true
+            // then scaleTo(S,90,90) the scrambler (not the tile) and center() it on the stage (default)
+
+                const scrambler = new Scrambler(new Tile(cards, cards.length, 1, 20, 20, true))
+                    .scaleTo(S,90,90)
+                    .center();
+
+            // C. Make a retry button
+            // set STYLE to font:"Joti One" and once:true
+            // then store in a variable called, again, a new Button() with AUTO, AUTO, "RETRY" as parameter values
+            // pos() at 0,50,CENTER,BOTTOM 
+            // and chain on a tap() that calls an arrow function 
+                // inside the arrow function reduce the num using num-- 
+                // this is so we do not increase a level if we are doing a retry
+                // and call a done() function that we will make next
+
+                STYLE = {font:"Joti One", once:true};
+
+                const again = new Button(AUTO, AUTO, "RETRY")
+                    .pos(0,50,CENTER,BOTTOM)
+                    .tap(()=>{
+                        num--;
+                        done();
+                    })
+            
+            // D. Make a function done() {} 
+                // inside the function dispose() the scrambler 
+                // dispose() the again button 
+                // and animate() the shield to an {alpha:0} in 2 seconds 
+                // set null for the ease parameter and set part4 for the call parameter 
+                // this will call part4 when the shield finishes animating   
+                
+                function done(){
+                    scrambler.dispose()
+                    again.dispose()
+                    shield.animate({
+                        props:{alpha:0},
+                        time:2,
+                        ease:null,
+                        call: part4
+                    })
+                }  //end of done function 
+            
+            // E. add a "complete" event to the scrambler using the on() method and have it call an arrow function 
+                // inside the arrow function, set the vis(false) of the again button 
+                // and make a new Pane() "CONGRATULATIONS!", purple, white 
+                // show(done) the pane which will show the pane and then call the done function when the pane is closed 
+
+                scrambler.on("complete", ()=>{
+                    again.vis = false 
+                    new Pane ("CONGRATULATIONS!", purple, white).show(done)
+                })
+            
+        // The end of the shield call function goes here
+
+            } //end of call
+        }) //end of animate
+
+        // AND THAT IS THE END OF THE BUILD TEST!  SEE SUBMITTING, BELOW.
+
+
+
+    }
+
+    // uncomment this if you want to run this part on its own - comment out any other run calls
+    // part5();
+    
+   
+
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // SUBMITTING 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    
+    // Please answer the following questions here and comment it out:
+
+    // i. What is your name?
+    // answer: Meggie WU
+    
+    // ii. What mark do you think you will get?
+    // answer: 40/50 (it seems to work, but I am the queen of missing details)
+
+    // iii. What did you think of the test and your skills?
+    // answer: Test was fun, I think I was able to follow along fine, it would be very
+    // hard to figure out how to do all of those things on my own 
+
+    // When done, please ZIP your folder BUT TAKE the video out 
+    // and submit to SLATE under Assignments > Build Test
+    // call the Professor over to show you have submitted
+    // and exit the room quietly
+    
+    // Thank you!
+    // Remember, treat this as a learning experience
+    // All the best.
+    
+
+}
+
+</script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+
+<body></body>
+
+</html>
