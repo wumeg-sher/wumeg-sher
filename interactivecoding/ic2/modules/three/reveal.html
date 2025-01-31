@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>ThreeJS Model</title>
+        
+        <script src="js/THREEx.WindowResize.js"></script>
+        <script src="js/THREEx.FullScreen.js"></script>
+    
+        <script type="module">
+    
+        // latest threejs module https://cdnjs.com/libraries/three.js
+
+        import * as THREE from "./module/three.module.js";
+        import {OrbitControls} from "./module/OrbitControls_module.js";
+        import {GLTFLoader} from "./module/GLTFLoader_module.js";
+        
+        // add a GLTF or GLB model from the Internet
+        // add a cube with array of 6 materials with trasparent:true 
+        // so that cube surrounds the model 
+        // add Raycaster() so when click on a side 
+        // we reduce the opacity of the side
+        // Consider making multiple animated cubes to break into vault or whatever
+
+        const scene = new THREE.Scene();        
+                
+        // CAMERA
+        const viewAngle = 70;
+        const windowW = window.innerWidth;
+        const windowH = window.innerHeight;
+        const aspectRatio = windowW/windowH;
+        const near = .1;
+        const far = 200000;
+        
+        const camera = new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far);
+        camera.position.z = 10; 
+        camera.position.y = 5; 
+        camera.position.x = 5; // back out of screen from origin (0,0,0)
+        // camera.position.set(1000,1000,500); // x,y,z
+        // camera.lookAt(scene.position);
+
+        // RENDERER
+        const renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(windowW, windowH);
+        document.body.appendChild(renderer.domElement);
+
+        // EVENTS
+        THREEx.WindowResize(renderer, camera);
+        THREEx.FullScreen.bindKey({charCode : "m".charCodeAt()});       
+        
+        // MODEL 
+        const loader = new GLTFLoader();
+        let fish;
+        // from https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0
+        loader.load("assets/BarramundiFish.glb", (gltf)=>{
+            fish = gltf.scene;
+        	scene.add(fish);
+            fish.scale.set(9,9,9)
+            fish.rotation.y = 90*Math.PI/180;
+            fish.position.y = -1;
+            // console.log(gltf.scene.children[0].children[0].children[0])
+            // gltf.scene.children[0].children[0].children[0].position.y = 1500;
+        }, undefined, error=>{
+            console.error(error);
+        });                
+        // "Cartoon Lowpoly Small City Free Pack" (https://skfb.ly/6zCKD) by antonmoek 
+        // is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+            
+        // // GEOMETRY
+         const geometry = new THREE.BoxGeometry(6, 4, 4);
+        
+         const material = [];
+            // order to add materials: x+,x-,y+,y-,z+,z-
+            material.push(new THREE.MeshLambertMaterial({color:0xff3333}));
+            material.push(new THREE.MeshLambertMaterial({color:0xff8800}));
+            material.push(new THREE.MeshLambertMaterial({color:0xffff33}));
+            material.push(new THREE.MeshLambertMaterial({color:0x33ff33}));
+            material.push(new THREE.MeshLambertMaterial({color:0x3333ff}));
+            material.push(new THREE.MeshLambertMaterial({color:0x8833ff}));
+
+            
+        // // MESH
+         const cube = new THREE.Mesh(geometry, material);           
+         scene.add(cube);     
+        
+        // SKYBOX
+        const skyBoxGeometry = new THREE.BoxGeometry(100000, 100000, 100000);
+        const skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x9999ff, side:THREE.BackSide});
+        const skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+        scene.add(skyBox);
+
+        // LIGHT
+        // LIGHT
+        const light1 = new THREE.PointLight(0xffffff, 1*Math.PI); // new lighting changes
+        light1.decay = 0; // seems to now be necessary on PointLight or use DirectionalLight);
+        light1.position.set(100,200,100);
+        scene.add(light1);
+        
+        const light2 = new THREE.PointLight(0xffffff, 1*Math.PI); 
+        light2.decay = 0;
+        light2.position.set(-100,-200,-100);
+        scene.add(light2);
+        
+        const light3 = new THREE.AmbientLight(0xffffff, .3*Math.PI);
+        scene.add(light3);
+
+        // CONTROLS
+        // const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
+
+
+        let mouse = {x:0, y:0};
+            let dir = 1;
+            const raycaster = new THREE.Raycaster();
+            renderer.domElement.addEventListener("mousedown", e => {
+                // convert the mouse to a ratio from the middle of the screen
+                // -1,-1  +0,-1  +1,-1
+                // -1,+0  +0,+0  +1,+0
+                // -1,+1  +0,+1  +1,+1
+                mouse.x = (e.clientX/window.innerWidth) * 2 - 1;
+                mouse.y = - (e.clientY/window.innerHeight) * 2 + 1;
+
+                // set the ray from camera to mouse
+                raycaster.setFromCamera(mouse, camera);
+
+                // get array of intersecting objects
+                let intersects = raycaster.intersectObjects(scene.children);
+                for (var i=0; i<intersects.length; i++) {
+                    let intersect = intersects[i];
+                    // intersect has object, distance, face3, faceIndex, point, uv properties
+                    if (intersect.object == cube) {
+
+                        // an example of removing the cube
+                        // scene.remove(cube);
+
+                        // an example of scaling the cube
+                        // or you could animate it in a similar way
+
+                        // if (cube.scale.x > 2) {
+                        //     // cube.scale.set(1,1,1); // or 2,2,2 to limit
+                        // }
+
+                        // an example of changing the color
+                        // set the color of the side that was clicked on
+                        // the face is a triangle in the geometry
+                        // I could not get the triangle to change color
+                        // despite reading 2 different ways to do it
+                        // but I eventually got the material to change!
+                        // first get the material index of the face
+                        // then use that on the cubes material array
+
+                        // this only works if the cube has an array of materials set
+                        let materialIndex = intersect.face.materialIndex; // sigh
+                        cube.material[materialIndex].color.setHex(0xffffff); // sigh
+
+                        // this would work if the cube had just one material
+                        // rather than an array of materials
+                        // cube.material.color.setHex(0xffffff);
+                    }
+                }
+            });
+
+
+        // ANIMATION
+        function render() {
+                        
+            // cube.rotation.x += 0.005;
+            // radians 5*Math.PI/180 // 5 degrees in radians
+            // cube.rotation.y += 0.005; 
+            // cube.rotation.z += 0.005;
+            
+            // camera.rotation.y += .005;
+            
+            renderer.render(scene, camera); 
+                           
+            requestAnimationFrame(render);
+        }
+        render();
+        
+
+        </script>
+        
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {margin:0px;}
+            canvas {width:100%; height:100%}
+        </style>
+
+
+    </head>
+    <body>
+        
+    </body>
+</html>

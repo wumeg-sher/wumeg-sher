@@ -1,0 +1,181 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ThreeJS Raycasting</title>
+
+    <script src="js/THREEx.WindowResize.js"></script>
+    <script src="js/THREEx.FullScreen.js"></script>
+
+    <script type="module">
+
+        // latest threejs module https://cdnjs.com/libraries/three.js
+
+        import * as THREE from "./module/three.module.js";
+        import {OrbitControls} from "./module/OrbitControls_module.js";
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            // SCENE
+            const scene = new THREE.Scene();
+
+            // CAMERA
+            const viewAngle = 70;
+            const windowW = window.innerWidth;
+            const windowH = window.innerHeight;
+            const aspectRatio = windowW/windowH;
+            const near = .1;
+            const far = 1000;
+            const camera = new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far);
+            camera.position.z = 10; // back out of screen a little from origin (0,0,0)
+            // camera.lookAt(scene.position);
+
+            // RENDERER
+            const renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(windowW, windowH);
+            document.body.appendChild(renderer.domElement);
+
+            // EVENTS
+        	THREEx.WindowResize(renderer, camera);
+        	THREEx.FullScreen.bindKey({charCode : 'm'.charCodeAt(0)});
+
+            // GEOMETRY
+            const geometry = new THREE.BoxGeometry(2, 2, 2);
+
+            // MATERIAL
+            // create an array of materials to be used in a cube, one for each side
+            // if we put the camera inside then we want THREE.BackSide or THREE.DoubleSide (not THREE.FrontSide - default)
+            const material = [];
+            // order to add materials: x+,x-,y+,y-,z+,z-
+            material.push(new THREE.MeshLambertMaterial({color:0xff3333}));
+            material.push(new THREE.MeshLambertMaterial({color:0xff8800}));
+            material.push(new THREE.MeshLambertMaterial({color:0xffff33}));
+            material.push(new THREE.MeshLambertMaterial({color:0x33ff33}));
+            material.push(new THREE.MeshLambertMaterial({color:0x3333ff}));
+            material.push(new THREE.MeshLambertMaterial({color:0x8833ff}));
+
+            // MESH
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            // ROOM
+            const roomG = new THREE.BoxGeometry(100, 40, 100);
+            const roomM = new THREE.MeshNormalMaterial({side:THREE.DoubleSide});
+            const room = new THREE.Mesh(roomG, roomM);
+            scene.add(room);
+
+            // LIGHTS
+            let light = new THREE.PointLight(0xffffff, 1*Math.PI); // new lighting changes
+            light.decay = 0; // seems to now be necessary on PointLight or use DirectionalLight
+            light.position.set(100,250,100);
+            scene.add(light);
+
+            light = new THREE.PointLight(0xffffff, 1*Math.PI); 
+            light.decay = 0; 
+            light.position.set(-100,-250,-100);
+            scene.add(light);
+
+            light = new THREE.AmbientLight(0x777777, 1*Math.PI);
+            scene.add(light);
+
+
+            // CONTROLS
+            var controls = new OrbitControls(camera, renderer.domElement);
+
+            // NEW
+            // Example of custom key controls
+            // disable orbit control keys
+            controls.noKeys = true; // current version is enableKeys
+            let spin = .001; // see render function
+            window.addEventListener("keydown", e => {
+                if (e.keyCode == 39) { // right
+                    spin-=.0002;
+                    e.preventDefault(); // in case makes document move
+                } else if (e.keyCode == 37) { // left
+                    spin+=.0002;
+                    e.preventDefault(); // in case makes document move
+                }
+            });
+
+            // NEW
+            // Example of RayCasting
+            let mouse = {x:0, y:0};
+            let dir = 1;
+            const raycaster = new THREE.Raycaster();
+            renderer.domElement.addEventListener("mousedown", e => {
+                // convert the mouse to a ratio from the middle of the screen
+                // -1,-1  +0,-1  +1,-1
+                // -1,+0  +0,+0  +1,+0
+                // -1,+1  +0,+1  +1,+1
+                mouse.x = (e.clientX/window.innerWidth) * 2 - 1;
+                mouse.y = - (e.clientY/window.innerHeight) * 2 + 1;
+
+                // set the ray from camera to mouse
+                raycaster.setFromCamera(mouse, camera);
+
+                // get array of intersecting objects
+                let intersects = raycaster.intersectObjects(scene.children);
+
+                for (var i=0; i<intersects.length; i++) {
+                    let intersect = intersects[i];
+                    // intersect has object, distance, face3, faceIndex, point, uv properties
+                    if (intersect.object == cube) {
+
+                        // an example of removing the cube
+                        // scene.remove(cube);
+
+                        // an example of scaling the cube
+                        // or you could animate it in a similar way
+                        // to how we spin the room
+                        cube.scale.x+=.1*dir;
+                        cube.scale.y+=.1*dir;
+                        cube.scale.z+=.1*dir;
+                        if (cube.scale.x > 2 || cube.scale.x < 1) {
+                            dir *= -1;
+                        }
+                        // if (cube.scale.x > 2) {
+                        //     // cube.scale.set(1,1,1); // or 2,2,2 to limit
+                        // }
+
+                        // an example of changing the color
+                        // set the color of the side that was clicked on
+                        // the face is a triangle in the geometry
+                        // I could not get the triangle to change color
+                        // despite reading 2 different ways to do it
+                        // but I eventually got the material to change!
+                        // first get the material index of the face
+                        // then use that on the cubes material array
+
+                        // this only works if the cube has an array of materials set
+                        let materialIndex = intersect.face.materialIndex; // sigh
+                        cube.material[materialIndex].color.setHex(0xffffff); // sigh
+
+                        // this would work if the cube had just one material
+                        // rather than an array of materials
+                        // cube.material.color.setHex(0xffffff);
+                    }
+                }
+            });
+
+
+            // ANIMATION
+            function render() {
+
+                cube.rotation.y -= .01;
+                room.rotation.y += spin; 
+
+                renderer.render(scene, camera);
+                requestAnimationFrame(render);
+            }
+            render();
+        });
+    </script>
+
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+    	body {margin:0px;}
+    	canvas {width:100%; height:100%}
+    </style>
+</head>
+<body>
+</body>
+</html>

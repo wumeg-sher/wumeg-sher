@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim_three";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+    
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+    
+    const menu = new TextureActive({
+        width:W, 
+        height:H,
+        corner:20
+        }).addTo();
+
+
+    const ball = new Circle(100, purple)
+        .center(menu)
+        .drag();
+
+    const backing = new TextureActive({
+        width:menu.width,
+        height:menu.height,
+        color:black,
+        corner:20,
+        animated:false,
+        interactive:false
+    }).addTo();
+    const back = TextureActive.makeBacking(backing.width, backing.height).addTo(backing);
+
+    const menu2 = new TextureActive({
+        width:300,
+        height:150,
+        corner:0,
+        color:yellow
+    }).addTo();
+
+    const slider = new Slider({min:0,max:menu.width,value:menu.width/2})
+        .center(menu2)
+        .change(()=>{
+            ball.x = slider.value
+        })
+  
+
+    //THREE
+    
+    //this is a ZIM three object
+    const three = new Three({
+        width:window.innerWidth,
+        height:window.innerHeight,
+        cameraPosition: new THREE.Vector3(0,0,500),
+        textureActive:true
+    });
+
+    const scene = three.scene;
+    const renderer = three.renderer;
+    const camera = three.camera;
+    const canvas = three.canvas;
+    
+    const controls = new OrbitControls(camera, canvas);
+
+
+
+    // add the backing to textureActives
+    // make a panel just like the last one
+    // move it forward 10 in Z
+
+    //the 1 at the end is an optional layer for processing raycasting
+    const textureActives = new TextureActives([menu, backing, menu2], 
+        THREE, 
+        three, 
+        renderer, 
+        scene, 
+        camera, 
+        controls, 
+        1,
+        100,
+        1000);
+
+    const panel = three.makePanel({
+        textureActive: menu, 
+        textureActives: textureActives, 
+        curve: 50,
+        opacity: .5
+        //doubleSide: true
+        }); //makes a mesh
+    scene.add(panel);
+
+    const panelBack = three.makePanel({
+        textureActive: backing, 
+        textureActives: textureActives, 
+        curve: -50,
+        opacity: .5}); 
+    scene.add(panelBack);
+    //panelBack.position.z=-5
+    panelBack.rotation.y=Math.PI;
+
+    const geometry = new THREE.BoxGeometry(50,25,10);
+    const texture = new THREE.CanvasTexture(menu2.canvas);
+    const material = [
+        new THREE.MeshBasicMaterial({color:red}),
+        new THREE.MeshBasicMaterial({color:red}),
+        new THREE.MeshBasicMaterial({color:red}),
+        new THREE.MeshBasicMaterial({color:red}),
+        new THREE.MeshBasicMaterial({map:texture}),
+        new THREE.MeshBasicMaterial({color:red})
+    ];
+
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+    // cube.position.z=-100
+    textureActives.addMesh(cube, 1);
+
+
+
+
+        
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

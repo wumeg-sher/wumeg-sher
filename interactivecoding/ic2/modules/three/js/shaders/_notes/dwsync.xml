@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AdditiveBlendShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922021879" remote="130969420830000000" Dst="1" />
+<file name="BasicShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922081792" remote="130969420830000000" Dst="1" />
+<file name="BleachBypassShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922151815" remote="130969420830000000" Dst="1" />
+<file name="BlendShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922211947" remote="130969420830000000" Dst="1" />
+<file name="BokehShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922282020" remote="130969420830000000" Dst="1" />
+<file name="BrightnessContrastShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922352020" remote="130969420830000000" Dst="1" />
+<file name="ColorCorrectionShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922411877" remote="130969420830000000" Dst="1" />
+<file name="ColorifyShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922481895" remote="130969420830000000" Dst="1" />
+<file name="ConvolutionShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922551912" remote="130969420830000000" Dst="1" />
+<file name="CopyShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922621947" remote="130969420830000000" Dst="1" />
+<file name="DOFMipMapShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922682073" remote="130969420830000000" Dst="1" />
+<file name="DotScreenShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922742091" remote="130969420830000000" Dst="1" />
+<file name="EdgeShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922801983" remote="130969420830000000" Dst="1" />
+<file name="EdgeShader2.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922862120" remote="130969420830000000" Dst="1" />
+<file name="FilmShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922992129" remote="130969420830000000" Dst="1" />
+<file name="FocusShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923052170" remote="130969420840000000" Dst="1" />
+<file name="FresnelShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923112159" remote="130969420840000000" Dst="1" />
+<file name="FXAAShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007922922009" remote="130969420840000000" Dst="1" />
+<file name="HorizontalBlurShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923172077" remote="130969420840000000" Dst="1" />
+<file name="HorizontalTiltShiftShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923232267" remote="130969420840000000" Dst="1" />
+<file name="HueSaturationShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923302109" remote="130969420840000000" Dst="1" />
+<file name="KaleidoShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923362247" remote="130969420840000000" Dst="1" />
+<file name="LambertToon.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923422262" remote="130969420840000000" Dst="1" />
+<file name="LuminosityShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923482320" remote="130969420840000000" Dst="1" />
+<file name="MirrorShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923542171" remote="130969420840000000" Dst="1" />
+<file name="NormalMapShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923602309" remote="130969420840000000" Dst="1" />
+<file name="RGBShiftShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923672306" remote="130969420840000000" Dst="1" />
+<file name="SepiaShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923792400" remote="130969420840000000" Dst="1" />
+<file name="SSAOShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923732315" remote="130969420840000000" Dst="1" />
+<file name="TriangleBlurShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923852347" remote="130969420840000000" Dst="1" />
+<file name="UnpackDepthRGBAShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923912362" remote="130969420840000000" Dst="1" />
+<file name="VerticalBlurShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007923972379" remote="130969420850000000" Dst="1" />
+<file name="VerticalTiltShiftShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007924042295" remote="130969420850000000" Dst="1" />
+<file name="VignetteShader.js" server="imm.sheridanc.on.ca//var/www/imm.sheridanc.on.ca/public/" local="130654007924102438" remote="130969420850000000" Dst="1" />
+</dwsync>

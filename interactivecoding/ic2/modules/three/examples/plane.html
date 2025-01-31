@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Plane</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel=stylesheet href="css/base.css"/>
+</head>
+<body>
+
+<script src="../js/THREEx.WindowResize.js"></script>
+<script src="../js/THREEx.FullScreen.js"></script>
+
+<script type="module">
+
+    import * as THREE from '../build/three.module.js';
+    import { TextureLoader } from './src/loaders/TextureLoader.js';
+    import { OrbitControls } from './jsm/controls/OrbitControls.js';
+
+    window.addEventListener("DOMContentLoaded", () => {
+
+        // SCENE
+        const scene = new THREE.Scene();
+
+        // CAMERA
+        const viewAngle = 70;
+        const windowW = window.innerWidth;
+        const windowH = window.innerHeight;
+        const aspectRatio = windowW/windowH;
+        const near = .1;
+        const far = 200000;
+        const camera = new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far);
+        camera.position.set(0,0,400);
+    	camera.lookAt(scene.position);
+
+        // RENDERER
+        const renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(windowW, windowH);
+        document.body.appendChild(renderer.domElement);
+
+        // EVENTS
+        THREEx.WindowResize(renderer, camera);
+        THREEx.FullScreen.bindKey({charCode : 'm'.charCodeAt(0)});
+
+        // PIC
+    	var picW = 1200;
+    	var picH = 800;
+        var picTexture = new THREE.TextureLoader().load('images/snow.jpg');
+    	var picMaterial = new THREE.MeshBasicMaterial({map:picTexture, side:THREE.DoubleSide});
+    	var picGeometry = new THREE.PlaneGeometry(picW, picH, 1, 1);
+    	var pic = new THREE.Mesh(picGeometry, picMaterial);
+    	pic.position.z = -100;
+    	scene.add(pic);
+
+    	// FLAKES
+    	var flake;
+    	var geometry = new THREE.SphereGeometry(3,4,3);   // reduced details
+    	var material = new THREE.MeshLambertMaterial({color:0xffffff});
+
+        function rand(a,b) {
+            return a+Math.random()*(b-a);
+        }
+
+    	for (var i=0; i<300; i++) {
+    		let mesh = new THREE.Mesh(geometry, material);
+    		mesh.position.set(
+    			rand(-picW/2,picW/2),
+    			rand(-picH/2,picH/2),
+    			rand(-90,300)
+    		);
+    		scene.add(mesh);
+    	}
+
+
+
+        // LIGHT
+    	var light = new THREE.PointLight(0xffffff);
+    	light.position.set(100,250,100);
+    	scene.add(light);
+    	var light2 = new THREE.AmbientLight(0x909090); // soft white light
+    	scene.add(light2);
+
+    	// SKYBOX
+        const skyBoxGeometry = new THREE.BoxGeometry(100000, 100000, 100000);
+        const skyBoxMaterial = new THREE.MeshBasicMaterial({color:0xffffff, side:THREE.BackSide});
+        const skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+        scene.add(skyBox);
+
+
+        // CONTROLS
+        const controls = new OrbitControls(camera, renderer.domElement);
+
+        // ANIMATION
+        function render() {
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
+        render();
+    });
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+    body {margin:0px;}
+    canvas {width:100%; height:100%}
+</style>
+</head>
+<body>
+</body>
+</html>

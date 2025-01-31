@@ -1,0 +1,98 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ThreeJS Template</title>
+
+    <script src="js/THREEx.WindowResize.js"></script>
+    <script src="js/THREEx.FullScreen.js"></script>
+
+    <script type="module">
+
+        // latest threejs module https://cdnjs.com/libraries/three.js
+
+        import * as THREE from "./module/three.module.js";
+        import {OrbitControls} from "./module/OrbitControls_module.js";
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            // SCENE
+            const scene = new THREE.Scene();
+
+            // CAMERA
+            const viewAngle = 70;
+            const windowW = window.innerWidth;
+            const windowH = window.innerHeight;
+            const aspectRatio = windowW/windowH;
+            const near = .1;
+            const far = 1000;
+            
+            const camera = new THREE.PerspectiveCamera(viewAngle, aspectRatio, near, far);
+            camera.position.z = 30; // back out of screen from origin (0,0,0)
+            // camera.position.set(10,10,30); // x,y,z
+            // camera.lookAt(scene.position);
+
+            // RENDERER
+            const renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(windowW, windowH);            
+            document.body.appendChild(renderer.domElement);
+
+            // EVENTS
+            THREEx.WindowResize(renderer, camera);
+        	THREEx.FullScreen.bindKey({charCode : "m".charCodeAt()});
+
+
+            // GEOMETRY
+            const geometry = new THREE.BoxGeometry(10, 10, 10);
+
+            // MATERIAL
+            // const material = new THREE.MeshBasicMaterial({color:0x333333}); // no shading
+            // const material = new THREE.MeshLambertMaterial({color:0x666666}); // needs light
+            // const material = new THREE.MeshPhongMaterial({color:0x666666}); // needs light and is glossy
+            const material = new THREE.MeshNormalMaterial(); // test colors
+
+            // MESH
+            const cube = new THREE.Mesh(geometry, material);           
+            scene.add(cube);            
+
+            // LIGHT
+            const light = new THREE.PointLight(0x0000ff);
+            light.position.set(100,200,100);
+            scene.add(light);
+            
+            const light2 = new THREE.PointLight(0xffffff);
+            light2.position.set(-100,-200,-100);
+            scene.add(light2);
+            
+            const light3 = new THREE.AmbientLight(0xff0000);
+            scene.add(light3);
+
+            // CONTROLS
+            const controls = new OrbitControls(camera, renderer.domElement);
+
+            // ANIMATION
+            function render() {
+                                                
+                // cube.rotation.x += 0.005;
+                // radians 5*Math.PI/180 // 5 degrees in radians
+                cube.rotation.y += 0.005; 
+                // cube.rotation.z += 0.005;
+                
+                // camera.rotation.y += .005;
+                
+                renderer.render(scene, camera); 
+                               
+                requestAnimationFrame(render);
+            }
+            render();
+        });
+    </script>
+
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+    	body {margin:0px; overflow:hidden;}
+    	canvas {width:100%; height:100%}
+    </style>
+</head>
+<body>
+</body>
+</html>
