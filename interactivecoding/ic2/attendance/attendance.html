@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance - ES6 module example</title>
+    <script type="module">
+        // import * as vis from "../modules/visualise.js"; //does not need to match module name
+        // console.log("Attendance file");
+        // console.log(vis.date());
+
+        import visualise from "../modules/visualise.js"; //for default assigned in module
+        const chart = new visualise.Chart([11, 12, 13], 2, 5);
+        console.log(chart.data);
+
+        const total = chart.add()
+        console.log(total)
+        // console.log(chart.findMin())
+        console.log(chart.divide());
+        console.log(chart.multiply());
+
+        // console.log(chart.#multiplier)
+        //cannot access private field 
+
+        const chart2 = new Chart([34]);
+        console.log(chart2.data);
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
