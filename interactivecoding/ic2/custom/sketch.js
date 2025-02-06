@@ -13,58 +13,69 @@ class HumidityConsole {
     this.x = x;  
     this.y = y; 
     this.currentHumidity = currentHumidity;
+    this.targetHumidity = currentHumidity;
 
     this.minHumidity = 0; 
     this.maxHumidity = 100; 
 
     this.upButton = createButton('Up');
-    this.upButton.position(this.x + 150, this.y + 40);
+    this.upButton.position(this.x + 175, this.y + 200);
     this.upButton.mousePressed(() => {
       if (this.currentHumidity < this.minHumidity) {
-        this.targetHumidity++;  
+        this.targetHumidity+=5;  
       }
     });
 
     this.downButton = createButton('Down');
-    this.downButton.position(this.x + 100, this.y + 40);
+    this.downButton.position(this.x + 120, this.y + 200);
     this.downButton.mousePressed(() => {
       if (this.currentHumidity > this.maxHumidity) {
-        this.temperature--;  // Decrement the temperature
+        this.targetHumidity-=5;  
       }
     });
 
+    this.offButton = createButton('Off');
+    this.offButton.position(this.x + 290, this.y + 200);
+    this.offButton.mousePressed(() => {
+      if (this.currentHumidity > this.maxHumidity) {
+        this.targetHumidity-=5;  
+      }
+    });
   }
 
-  // Method to update the temperature and render the console
-  update() {
-    this.temperature = this.slider.value(); // Update temperature based on slider value
-  }
+  // update() {
+  //   this.currentHumidity = this.targetHumidity.value();
+  // }
 
-  // Method to display the console and temperature
   display() {
     fill(200);
-    rect(this.x, this.y, this.width, this.height, 10); // Draw the console background
+    rect(this.x, this.y, 350, 250, 10);
+
+    fill(100);
+    rect(this.x + 30, this.y + 50, 290, 110, 10);
 
     fill(0);
     textSize(16);
-    textAlign(LEFT, TOP);
-    text("Temperature Control Console", this.x + 20, this.y + 10);
+    text("Humidity", this.x + 140, this.y + 35);
     textSize(14);
-    text("Current Temperature: " + this.temperature + "°C", this.x + 20, this.y + 70);
-    text("Adjust Temperature:", this.x + 20, this.y + 30);
+    text("Current Humidity: ", this.x + 40, this.y + 75);
+    text(this.currentHumidity, this.x + 40, this.y + 150);
+    text("Target Humidity: ", this.x + 175, this.y + 75);
+    text(this.targetHumidity, this.x + 175, this.y + 150);
+    text("Adjust Humidity:", this.x + 30, this.y + 190);
   }
 }
 
-let tempConsole;
+let humidityConsole;
 
 function setup() {
   createCanvas(400, 300);
-  tempConsole = new TemperatureControlConsole(50, 50, 300, 180); // Create console
+  humidityConsole = new HumidityConsole(20, 20, 50);
 }
 
 function draw() {
   background(240);
 
-  tempConsole.update(); // Update temperature
-  tempConsole.display(); // Display the console
+  // humidityConsole.update(); 
+  humidityConsole.display();
 }
