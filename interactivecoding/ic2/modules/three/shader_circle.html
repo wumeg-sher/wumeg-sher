@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Shader Circle - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+       // -----------------------  CIRCLE 
+
+
+    // https://www.shadertoy.com/view/XsXGRS
+    // https://www.shadertoy.com/view/lsfGzr
+
+    const fragment = `    
+// center will be wiggled outside in ZIM so need a uniform
+uniform vec2 center;
+
+// prepare a function to convert RGB 0-255 to 0-1
+vec3 rgb(float r, float g, float b) {
+    return vec3(r/255.0, g/255.0, b/255.0); // 0-1
+}
+
+// prepare a function to see if each point (uv) is inside or outside radius
+// from wherever the center of the circle is located (pos - based on center uniform)
+vec4 circle(vec2 uv, vec2 pos, float rad, vec3 color) {
+    float d = length(pos - uv) - rad;
+    float t = clamp(d, 0.0, 1.0); // threshhold 0 if within radius range from center
+    return vec4(color, 1.0 - t); // alpha 0 if outside radius
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+
+    // circle will be 1/2 the height 
+    float radius = 0.25 * iResolution.y;
+
+    // Background
+    vec4 layer1 = vec4(rgb(255.0, 165.0, 0.0), 1.0);
+
+    // Circle
+    vec3 red = rgb(255.0, 0.0, 0.0);
+    vec4 layer2 = circle(fragCoord.xy, center, radius, red);
+    
+    // Blend the two using the alpha of the circle
+    fragColor = mix(layer1, layer2, layer2.a);
+
+}    
+    `;   
+
+    const width = 500;
+    const height = 500;
+
+    const uniforms = {
+        center:[width/2, height/2]
+    }
+    STYLE = {log:true}
+    const u = new Uniforms(uniforms).wiggle("center_A", width/2, 50,100, 2,4);
+    const s = new Shader(width, height, fragment, u).center().drag();
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

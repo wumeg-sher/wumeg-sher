@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Shader uniforms</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+
+    const fragment = `
+        uniform vec4 color;
+        // uniform float red;
+        void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+            // fragColor = vec4(red,0,0,1);
+            fragColor = color;
+            }
+    `;
+
+    const u = new Uniforms ({
+        // red:.5, 
+        color:[0,1,1,1]
+    });
+
+    const shader = new Shader(W, H, fragment, u).center().drag({onTop:false});
+
+
+    u.wiggle("color_A", .5, .1, .5, 1, 2)
+    u.wiggle("color_B", .5, .1, .5, 1, 2)
+    u.wiggle("color_C", .5, .1, .5, 1, 2)
+
+    // timeout(1, ()=>{
+    //     u.color_A = 1;
+    // })
+
+    // u.animate({props:{red:1}, rewind:true, loop:true});
+
+    // const slider = new Slider ({min:0, max:1, value:u.red}).center().change(()=>{
+    //     u.red = slider.value;
+    // })
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
