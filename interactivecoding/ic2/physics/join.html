@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim_physics";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready, "background.jpeg", "assets/");
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+    new Pic ("background.jpeg").sca(.35).pos(0,0,CENTER, BOTTOM);
+
+    const physics = new Physics ({
+        scroll:true,
+        borders: new Boundary(0,-H,W,H*2)
+    }).drag();
+
+    const ball = new Circle(60, new RadialColor([salmon, yellow]))
+        .center()
+        .mov(rand(-50,50))
+        .addPhysics({bounciness:0.5})
+        .follow(.5);
+    ball.body.SetBullet(true);
+
+    ball.contact(()=>{
+        new Circle(rand(10,30), black)
+            .reg(ball.radius)
+            .loc(0,0,ball)
+            .rot(-ball.rotation-90)
+            .alp(.02)
+            .setMask(ball)
+    })
+
+    // const ball2 = new Circle(20, new RadialColor([salmon, yellow]))
+    //     .center()
+    //     .mov(200)
+    //     .addPhysics()
+
+    // physics.join(ball, ball2, null, null, null, null, "distance")
+
+    const fulcrum = new Triangle(150,150,150)
+        .pos(0,0,CENTER,BOTTOM)
+        .addPhysics(false);
+    fulcrum.on("mousedown", ()=>{
+        if (bar.rotation<0) {
+        bar.spin(900)
+    }
+        else {
+            bar.spin(-900)
+        }
+    });
+
+    const bar = new Rectangle(600,30, new GradientColor([black, grey, black]))
+        .reg(CENTER)
+        .loc(fulcrum)
+        .mov(0,-50)
+        .addPhysics();
+
+    const edge1 = new Rectangle(200,30)
+        .reg(CENTER)
+        .loc(892,606)
+        .rot(-30)
+        .addPhysics();
+
+    const edge2 = new Rectangle(200,30)
+        .reg(CENTER)
+        .loc(133,606)
+        .rot(30)
+        .addPhysics();
+
+
+    //obj1, obj2, point1, point2, minAngle, maxAngle, type
+    physics.join(fulcrum, bar, new Point (bar.x, bar.y), null, null, null, "revolute")
+    physics.join({
+        obj1: bar,
+        obj2: edge1,
+        type: "weld"
+    });
+
+    physics.join({
+        obj1: bar,
+        obj2: edge2,
+        type: "weld"
+    });
+
+    F.on("keydown", (e)=>{
+        if (e.key =="ArrowLeft") {
+            bar.spin(900)}
+        if (e.key =="ArrowRight") {
+            bar.spin(-900)}
+        if (e.key =="ArrowUp" || e.key ==" ") {
+            if (bar.rotation<0) {
+                bar.spin(900)
+            } else {
+                bar.spin(-900)}} 
+    });
+
+
+
+
+
+    //physics.debug();
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
