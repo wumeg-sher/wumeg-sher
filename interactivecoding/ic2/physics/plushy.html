@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Physics - Plushy Sling with Ground - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim_physics";
+import piz from "https://zimjs.org/cdn/017/zim_pizzazz";
+
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, dark, dark, ready, "ai_plushies.png", "https://zimjs.org/assets/");
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+    const w = W*3;
+    const h = H*3;
+
+    const backing = new Rectangle(w, h, white)
+        .pos(0,0,LEFT,BOTTOM)
+        .noMouse();
+
+    makePattern("slants", series(green,blue), 50, 50, 70)
+        .siz(h,w)  
+        .rot(90)      
+        .alp(.2)
+        .reg(0,0)
+        .pos(0,0,LEFT,BOTTOM)
+        .noMouse();
+
+    new Rectangle(w, 100, green).pos(0,0,LEFT,BOTTOM)
+
+    const physics = new Physics(10, new Boundary(0,-H*2,w,h), true);
+    
+
+    const sprite = new Sprite("ai_plushies.png", 4, 5)
+        .center() 
+        // .outline()    
+        // .run({frame:8})
+        //.addPhysics({dynamic:false, contract:10, bounciness:.5});
+
+    const plushy = new Blob({
+        points: simplifyPoints(outlineImage(new Bitmap(sprite))),
+        color: faint,
+        interactive: false
+    }).loc(sprite).addPhysics();
+
+    sprite.addTo(plushy, 0);
+
+    plushy.addPhysics({dynamic:false, contract:10, shape:"rectangle"})
+    
+    physics.drag(plushy);
+
+
+    // damp, dampY, leftOffset, rightOffset, upOffset, downOffset, offsetDamp, offsetDampY, horizontal, vertical, borderLock, borderOriginal
+    // plushy.follow({borderLock:false});
+    plushy.follow(); // do not use borderLock if gravity
+
+
+    // when mousedown on plushy, apply impulse force
+
+    const factor = 20;
+
+    plushy.on("mousedown", ()=>{
+        plushy.dynamic = true;
+        plushy.startX = plushy.x;
+        plushy.startY = plushy.y;
+    })
+
+    plushy.on("pressup", ()=>{
+        const diffX = plushy.x-plushy.startX;
+        const diffY = plushy.y-plushy.startY;
+        plushy.impulse(-diffX*factor, -diffY*factor)
+    });
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
