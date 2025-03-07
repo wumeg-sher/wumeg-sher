@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Claw Machine</title>
+
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+    import zim from "https://zimjs.org/cdn/017/zim_physics";
+    import piz from "https://zimjs.org/cdn/017/zim_pizzazz";
+
+    const plushies = ["panda.png", "bear.png","bunny.png","duck.png","fox.png", "cat.png", "dog.png", "penguin.png"];
+    const assets = ["clawmachine.png", "claw.png", "catcher.png", ...plushies];
+    const path = "assets/";
+
+    // See Docs under Frame for FIT, FILL, FULL, and TAG
+    new Frame(FIT, 1024, 768, white, dark, ready, assets, path);
+    function ready() {
+        // given F (Frame), S (Stage), W (width), H (height)
+
+
+    
+
+
+
+        // background
+        new Rectangle(W, H, "#87CEEB").pos(0, 0); // 天空蓝背景
+        new Rectangle(W, 100, green).pos(0, 0, LEFT, BOTTOM); // 草地
+
+        
+        // prize area
+        const prizeBox = new Rectangle(200, 145, darken(salmon,.2)).centerReg().loc(329, 700);
+        const contactBar = new Rectangle(100, 45, darken(salmon,.2)).centerReg().loc(337, 700);
+
+        // claw - first create the claw
+        const claw = new Container().addTo();
+        const clawBase = new Pic("catcher.png").sca(0.2).rot(180).addTo(claw);
+        const rope = new Rectangle(2, 0, "#333").pos(0, 0).addTo(claw);
+        claw.pos(W/2, 80);
+
+        // machine background - create behind the claw and ensure it's on top
+        const machine = new Pic("clawmachine.png").sca(0.45).center().mov(0, -100).top();
+
+        const physics = new Physics({
+            borders: S
+        }).drag();
+
+        // keep only the outer boundaries and the prize area
+        new Rectangle(W,10).centerReg().alp(.05).pos(0,0,CENTER,BOTTOM).addPhysics({dynamic:false, categoryBits:2, maskBits:2});
+        new Rectangle(W,10).centerReg().alp(.05).pos(0,0,CENTER,TOP).addPhysics({dynamic:false, categoryBits:2, maskBits:2});
+        new Rectangle(10,H).centerReg().alp(.05).pos(0,0,LEFT,CENTER).addPhysics({dynamic:false, categoryBits:2, maskBits:2});
+        new Rectangle(10,H).centerReg().alp(.05).pos(0,0,RIGHT,CENTER).addPhysics({dynamic:false, categoryBits:2, maskBits:2});
+
+        // add a invisible floor in the middle of the claw machine, half the width and adjust the position
+        new Rectangle(W/1.4, 10).centerReg().alp(0).pos(W/4, 525, CENTER).addPhysics({dynamic:false, categoryBits:1, maskBits:1});
+
+        // add the two vertical barriers on the left and right
+        new Rectangle(10, 250).centerReg().alp(0).pos(W/4 - W/2.8, 475, CENTER).addPhysics({dynamic:false, categoryBits:1, maskBits:1}); // left barrier
+        new Rectangle(10, 250).centerReg().alp(0).pos(W/4, 475, CENTER).addPhysics({dynamic:false, categoryBits:1, maskBits:1}); // 中间挡板
+
+        let isGrabbing = false;
+        let grabbedDoll = null;
+        let isMoving = false;
+        let ropeLength = 0;
+        const maxRopeLength = 400;
+        const ropeSpeed = 5;
+
+        // get prize function
+        let getPrize = (e) => {
+            let item = e.target;
+            let parent = item.parent;
+            if (item.hitTestRect(contactBar) && parent.won == false) {
+                parent.removePhysics();
+                parent.addPhysics({dynamic:true, bounciness:.5, categoryBits:2, maskBits:2});
+                item.addTo(parent);
+                physics.drag(parent);
+                item.top();
+                parent.top();
+                parent.won = true;
+            }
+        }
+
+        // load dolls
+        let plushyList = [];
+        for (let i=0; i<4; i++) {
+            let startX = 80 + Math.random() * 30;    // keep the X axis range
+            let startY = 250 + Math.random() * 80;    // keep the Y axis range
+            
+            let sprite = new Pic(plushies).pos(startX, startY, CENTER);
+
+            let plushy = new Blob({
+                points:simplifyPoints(outlineImage(new Bitmap(sprite)), 10),
+                color:faint,
+                interactive:false
+            }).loc(sprite).sca(0.5);
+
+            sprite.addTo(plushy);
+            plushy.addPhysics({
+                dynamic: true,
+                bounciness: 0.1,    // reduce elasticity, prevent too much bouncing
+                friction: 0.8,      // adjust friction
+                density: 1.5,       // adjust density
+                restitution: 0.1,   // keep low bounce
+                categoryBits: 1,
+                maskBits: 1
+            });
+            
+            // ensure the doll is in the correct layer
+            plushy.on("pressup", getPrize);
+            plushy.won = false;
+            plushy.scored = false;
+            physics.drag(plushy);
+            plushyList.push(plushy);
+            S.update();
+        }
+
+        // claw control
+        S.on("mousemove", e => {
+            if(!isMoving && !isGrabbing) {
+                claw.x = constrain(e.x, 300, 700);
+            }
+        });
+
+        // grab action
+        S.on("mousedown", e => {
+            if(!isGrabbing && !isMoving && ropeLength === 0) {
+                isMoving = true;
+                let dropInterval = setInterval(() => {
+                    ropeLength += ropeSpeed;
+                    rope.height = ropeLength;
+                    clawBase.y = ropeLength;
+
+                    // check if it contacts the doll
+                    if(ropeLength >= 300) {
+                        clearInterval(dropInterval);
+                        
+                        // find the closest doll
+                        let closestDoll = null;
+                        let minDistance = Infinity;
+                        plushyList.forEach(plushy => {
+                            if (!plushy.won) {
+                                let dx = Math.abs(plushy.x - claw.x);
+                                let dy = Math.abs((plushy.y) - (claw.y + ropeLength));
+                                let distance = Math.sqrt(dx * dx + dy * dy);
+                                
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    closestDoll = plushy;
+                                }
+                            }
+                        });
+
+                        // increase the grab range and ensure the grab is successful
+                        if (closestDoll && minDistance < 100) {
+                            isGrabbing = true;
+                            grabbedDoll = closestDoll;
+                            grabbedDoll.removePhysics();
+                            
+                            // position the doll below the catcher
+                            let catcherWidth = claw.width;
+                            let dollWidth = grabbedDoll.width;
+                            grabbedDoll.pos(
+                                claw.x + (catcherWidth - dollWidth) / 2,  // horizontal center alignment
+                                claw.y + ropeLength + claw.height  // stick to the bottom of the catcher
+                            );
+                        }
+
+                        // start to retract
+                        let returnInterval = setInterval(() => {
+                            ropeLength -= ropeSpeed;
+                            rope.height = ropeLength;
+                            clawBase.y = ropeLength;
+                            
+                            if(grabbedDoll) {
+                                // move to the left position (400), ensure it doesn't exceed the claw machine boundaries
+                                claw.x = constrain(claw.x - 8, 400, 700);  // limit the minimum x coordinate to 400
+                                grabbedDoll.x = claw.x;
+                                grabbedDoll.y = claw.y + ropeLength + 20;
+                            }
+
+                            if(ropeLength <= 0) {
+                                clearInterval(returnInterval);
+                                isMoving = false;
+                                if(grabbedDoll) {
+                                    // release the doll at the leftmost position, let it fall into the scoring area
+                                    grabbedDoll.pos(300, claw.y + 20);  // fix at the leftmost position
+                                    grabbedDoll.addPhysics({
+                                        dynamic: true,
+                                        bounciness: 0.5,
+                                        categoryBits: 1,
+                                        maskBits: 1
+                                    });
+                                    grabbedDoll = null;
+                                    isGrabbing = false;
+                                }
+                            }
+                        }, 20);
+                    }
+                }, 20);
+            }
+        });
+
+
+        // use the physics engine's tick event to detect the doll position
+        Ticker.add(() => {  // use Ticker instead of physics.on
+            plushyList.forEach(plushy => {
+                if (plushy.hitTestRect(prizeBox) && !plushy.scored && plushy.won) {
+                    updateScore();
+                    plushy.scored = true;
+                }
+            });
+        });
+
+    } // end ready
+
+</script>
+</head>
+<body></body>
+</html>

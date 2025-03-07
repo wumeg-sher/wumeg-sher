@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FIT, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+
+const fragment = `
+float width = 145.;
+float height = 192.;
+const int maxIter = 10;
+float maxDist = 24650.;
+
+float attenuate = .7;
+float full = 0.2;
+float scaleStrokeSize = .8;
+
+vec2 MinDist2(vec2 a, vec2 b, float size) {
+	float val;
+	float col;
+	float cursor = max(a.x - size, 0.0) - max(b.x - size, 0.0);
+	cursor = clamp(cursor, 0.0, 1.0);
+	val = min(a.x, b.x);
+	col = mix(a.y, b.y, cursor);
+	return vec2(val, col);
+}
+
+vec2 GetCubicCurveAtCursor(vec2 p0, vec2 p1, vec2 p2, vec2 p3, float cursor)
+{
+	vec2 lastPoint = vec2(0.0, 0.0);
+	lastPoint.x = p0.x;
+	lastPoint.y = p0.y;
+
+	float i = cursor;
+	float mt = 1.0-i; 
+	float mt2 = mt*mt; 
+	float mt3 = mt*mt*mt; 
+	float t2 = i*i; 
+	float t3 = i*i*i; 
+	float x =(p0.x*mt3)+(p1.x*3.0*i*mt2)+(p2.x*3.0*t2*mt)+p3.x*t3;
+	float y =(p0.y*mt3)+(p1.y*3.0*i*mt2)+(p2.y*3.0*t2*mt)+p3.y*t3;
+
+	lastPoint.x = (x);
+	lastPoint.y = (y);
+	return lastPoint;
+}
+
+bool IsIn(vec2 p0, vec2 p1, vec2 p2, vec2 p3, vec2 toTest, float size) {
+
+	vec2 maxs;
+	vec2 mins;
+	
+	maxs.x = max(p0.x, p1.x);
+	maxs.x = max(p2.x, maxs.x);
+	maxs.x = max(p3.x, maxs.x);
+	maxs.y = max(p0.y, p1.y);
+	maxs.y = max(p2.y, maxs.y);
+	maxs.y = max(p3.y, maxs.y);
+	
+	maxs += size;
+	
+	mins.x = min(p0.x, p1.x);
+	mins.x = min(p2.x, mins.x);
+	mins.x = min(p3.x, mins.x);
+	mins.y = min(p0.y, p1.y);
+	mins.y = min(p2.y, mins.y);
+	mins.y = min(p3.y, mins.y);
+	
+	mins -= size;
+	
+	return toTest.x > mins.x && toTest.x < maxs.x && toTest.y > mins.y && toTest.y < maxs.y; 
+}
+
+vec2 GetDistanceToCurve(vec2 p0, vec2 p1, vec2 p2, vec2 p3, float localProgress, float size, vec2 pos)
+{
+	vec2 currentPoint = pos;
+
+	float start = 0.0;
+	float end = 1.0;
+	float value = maxDist;
+	float color = attenuate;
+
+	float factor = 5.0;
+	float progressDist = clamp((localProgress - start) * factor, 0.0, 1.0);
+	color = mix(attenuate, full, progressDist);
+	
+	if (!IsIn(p0, p1, p2, p3, currentPoint, size)) {
+        return vec2(value, color);
+	}
+	
+	
+	for (int loopIter = 0; loopIter < maxIter; loopIter++) {
+		vec2 ptA = GetCubicCurveAtCursor(p0, p1, p2, p3, start);
+		vec2 rA = currentPoint;
+		rA = rA - ptA;
+		float distA = length(rA);
+		
+		vec2 ptB = GetCubicCurveAtCursor(p0, p1, p2, p3, end);
+		vec2 rB = currentPoint;
+		rB = rB - ptB;
+		float distB = length(rB);
+		
+		
+		if (distA < distB) {
+			if (distA <= value) {
+				value = distA;
+				progressDist = clamp((localProgress - start) * factor, 0.0, 1.0);
+				color = mix(attenuate, full, progressDist);
+			}
+			end = start + (end - start) * 0.5;
+			start = clamp(start - (end - start) * 0.5, 0.0, 1.0);
+		} else {
+			if (distB <= value) {
+				value = distB;
+				progressDist = clamp((localProgress - end) * factor, 0.0, 1.0);
+				color = mix(attenuate, full, progressDist);
+			}
+			start = start + (end - start) * 0.5;
+			end = clamp(end + (end - start) * 0.5, 0.0, 1.0);
+		}
+		if (value < size) {
+			break;
+		}
+	}
+	return vec2(value, color);
+}
+
+vec2 stroke3(float localProgress, float size, vec2 pos) {
+    vec2 p0;
+	vec2 p1;
+	vec2 p2;
+	vec2 p3;
+	
+	vec2 c = vec2(maxDist, attenuate);
+
+	float currentProgress = localProgress * 3.;	
+
+	p0 = vec2(78.,91.);
+	p1 = vec2(118.,88.);
+	p2 = vec2(160.,139.);
+	p3 = vec2(87.,160.);
+	c = MinDist2(GetDistanceToCurve(p0, p1, p2, p3, currentProgress - 2., size, pos), c, size);
+	p0 = vec2(26.,148.);
+	p1 = vec2(12.,127.);
+	p2 = vec2(38.,93.);
+	p3 = vec2(78.,91.);
+	c = MinDist2(GetDistanceToCurve(p0, p1, p2, p3, currentProgress - 1., size, pos), c, size);
+	p0 = vec2(90.,77.);
+	p1 = vec2(81.,130.);
+	p2 = vec2(39.,170.);
+	p3 = vec2(26.,148.);
+	c = MinDist2(GetDistanceToCurve(p0, p1, p2, p3, currentProgress - 0., size, pos), c, size);
+
+	
+    return c;
+}
+
+vec2 stroke2(float localProgress, float size, vec2 pos) {
+    vec2 p0;
+	vec2 p1;
+	vec2 p2;
+	vec2 p3;
+	
+	vec2 c = vec2(maxDist, attenuate);
+
+	float currentProgress = localProgress * 1.;	
+
+	p0 = vec2(60.,38.);
+	p1 = vec2(53.,87.);
+	p2 = vec2(54.,122.);
+	p3 = vec2(70.,149.);
+	c = MinDist2(GetDistanceToCurve(p0, p1, p2, p3, currentProgress - 0., size, pos), c, size);
+
+	
+    return c;
+}
+
+vec2 stroke1(float localProgress, float size, vec2 pos) {
+    vec2 p0;
+	vec2 p1;
+	vec2 p2;
+	vec2 p3;
+	
+	vec2 c = vec2(maxDist, attenuate);
+
+	float currentProgress = localProgress * 1.;	
+
+	p0 = vec2(27.,67.);
+	p1 = vec2(56.,67.);
+	p2 = vec2(84.,64.);
+	p3 = vec2(109.,60.);
+	c = MinDist2(GetDistanceToCurve(p0, p1, p2, p3, currentProgress - 0., size, pos), c, size);
+
+	
+    return c;
+}
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 uv = fragCoord/iResolution.xy;
+    vec3 col = 0.9 + 0.1*cos(iTime+uv.xyx+vec3(0,2,4));
+
+    float size = 5.0 * scaleStrokeSize;
+	
+	vec2 c = vec2(maxDist, attenuate);
+    
+    float progress = mod(iTime * 0.5, 1.1);
+    
+    float ratio = min(iResolution.x/width, iResolution.y/height);
+	
+    vec2 coord = fragCoord / ratio;
+    
+    vec2 pos = vec2(coord.x - (iResolution.x - width * ratio) * .5 /ratio, (height - coord.y)  - (iResolution.y - height * ratio) * .5 /ratio);
+    
+	float localProgress = progress * 3.;
+	c = MinDist2(stroke3(localProgress - 2., size, pos), c, size);
+	c = MinDist2(stroke2(localProgress - 1., size, pos), c, size);
+	c = MinDist2(stroke1(localProgress - 0., size, pos), c, size);
+
+		
+	float val = clamp((c.x - (size)), 0.0, 1.0);
+
+	float gray = c.y;
+	
+	val = val*val*val;
+	
+	vec4 color = vec4(gray, gray, gray, 1.0 - val);
+	
+	if (color.a == 0.0) {
+		fragColor = vec4(col,1.0);
+	} else {
+		fragColor = color;
+	}
+}
+`
+
+
+new Shader(500, 500, fragment).addTo().drag();
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
