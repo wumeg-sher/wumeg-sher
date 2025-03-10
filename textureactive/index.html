@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Bomb Box - not a bomb</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim_three"; 
+// may need to import some other helper modules too depending on feature - see Studio HTML page
+
+new Frame(FIT, 1000, 400, darker, darker, ready);
+function ready() {
+    
+   	// ~~~~~~~~~~~~~~~~~~~~~~~
+    // ZIM
+	
+    // TEXTUREACTIVE 
+    // for more options - see https://zimjs.com/docs.html?item=TextureActive
+    // Here we use gallery as that is what is used in the Studio examples
+    // but you can call it whatever you want like menu, game, etc. 
+    // and then make sure the change the name passed to the TextureActives further down
+    const gallery = new TextureActive({
+        width:W,
+        height:H,
+        color:light, // may need to change this to match feature color
+        corner:0
+    }).addTo();
+
+
+
+
+    // EXAMPLE FEATURE - paste feature from studio here
+    const color = series(red,green,blue);
+    const squares = new Tile(new Rectangle(60,60,color),3,1,60)
+	    .pos(-80,40,CENTER,BOTTOM,gallery);
+	
+    const chars = series("G","R","B");
+    const letters = new Tile(new Label({
+	    text:chars, font:"Protest Strike", size:50, shiftV:4, 
+	    paddingH:15, paddingV:5, backgroundColor:light
+    }), 3,1, 60)
+        .pos(100,40,RIGHT,TOP,gallery);
+
+    var points = [
+	    [squares.items[0], [0,0,1,0], true, false, null, 60], 
+	    [squares.items[1], [0,0,1,0], true, false], 
+	    [squares.items[2], [0,0,1,0], true, false, 60],	
+	    [letters.items[0], [0,0,0,1], false], 
+	    [letters.items[1], [0,0,0,1], false], 
+	    [letters.items[2], [0,0,0,1], false]
+    ];
+
+    const connectors = new Connectors({
+        points:points, 
+        node:new Circle(10, clear, clear), 
+        nodeRollColor:clear, 
+        nodeRollBorderColor:white, 
+        baseRollover:true, 
+        num:1, 
+        dropType:"single",
+        line:new Line({color:purple, thickness:3, lineType:"curve", startHead:"arrow"})		
+    }).addTo(gallery);
+
+    // WINNING
+    const emitter = new Emitter({startPaused:true}).center(gallery);
+
+    squares.items[0].m=letters.items[1]; 
+    squares.items[1].m=letters.items[0]; 
+    squares.items[2].m=letters.items[2];
+
+    connectors.on("connection", ()=>{
+        const answer = connectors.lines.loop(line=>{
+            if (line.creatorNode.base.m != line.node.base) return false;
+        });
+        if (connectors.lines.numChildren==squares.items.length && answer) {
+            emitter.spurt(20);
+        }
+    }); 
+
+    // END EXAMPLE FEATURE
+
+
+
+    const gallery2 = new TextureActive({
+        width:W,
+        height:H,
+        color:light, // may need to change this to match feature color
+        corner:0
+    }).addTo();
+
+
+    // EXAMPLE FEATURE - paste feature from studio here
+    const color2 = series(red,green,blue);
+    const squares2 = new Tile(new Rectangle(60,60,color),3,1,60)
+	    .pos(-80,40,CENTER,BOTTOM,gallery2);
+	
+    const chars2 = series("G","R","B");
+    const letters2 = new Tile(new Label({
+	    text:chars, font:"Protest Strike", size:50, shiftV:4, 
+	    paddingH:15, paddingV:5, backgroundColor:light
+    }), 3,1, 60)
+        .pos(100,40,RIGHT,TOP,gallery2);
+
+    var points = [
+	    [squares2.items[0], [0,0,1,0], true, false, null, 60], 
+	    [squares2.items[1], [0,0,1,0], true, false], 
+	    [squares2.items[2], [0,0,1,0], true, false, 60],	
+	    [letters2.items[0], [0,0,0,1], false], 
+	    [letters2.items[1], [0,0,0,1], false], 
+	    [letters2.items[2], [0,0,0,1], false]
+    ];
+
+    const connectors2 = new Connectors({
+        points:points, 
+        node:new Circle(10, clear, clear), 
+        nodeRollColor:clear, 
+        nodeRollBorderColor:white, 
+        baseRollover:true, 
+        num:1, 
+        dropType:"single",
+        line:new Line({color:purple, thickness:3, lineType:"curve", startHead:"arrow"})		
+    }).addTo(gallery2);
+
+    // WINNING
+    const emitter2 = new Emitter({startPaused:true}).center(gallery2);
+
+    squares2.items[0].m=letters2.items[1]; 
+    squares2.items[1].m=letters2.items[0]; 
+    squares2.items[2].m=letters2.items[2];
+
+    connectors2.on("connection", ()=>{
+        const answer = connectors2.lines.loop(line=>{
+            if (line.creatorNode.base.m != line.node.base) return false;
+            });
+        if (connectors2.lines.numChildren==squares2.items.length && answer) {
+            emitter.spurt(20);
+        }
+    }); 
+
+
+    // NOTE: some features have more than one TextureActive - see Studio HTML file 
+    // You can have as many TextureActive objects as desired
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~
+    // THREEJS
+
+	// NOTE: generally dimensions in 3D do not matter - it is all relative
+    // but just watch out, for VR it does so with the VR template things are smaller
+    // test dimensions early if you might want to view in VR 
+   
+    const three = new Three({
+        width:window.innerWidth, 
+        height:window.innerHeight, 
+        cameraPosition:new THREE.Vector3(0,0,500),
+        textureActive:true
+    });
+
+
+    const renderer = three.renderer;
+    const scene = three.scene;
+    const camera = three.camera;
+    const canvas = three.canvas;
+
+    camera.position.z = 250; 
+    camera.position.y = 150; 
+    camera.position.x = 150;
+    const controls = new OrbitControls(camera, canvas);
+
+    const skyBoxGeometry = new THREE.BoxGeometry(100000, 100000, 100000);
+        const skyBoxMaterial = new THREE.MeshBasicMaterial({color:0x9999ff, side:THREE.BackSide});
+        const skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+        scene.add(skyBox);
+
+
+
+
+
+
+    // TEXTUREACTIVES
+    // more options - see https://zimjs.com/docs.html?item=TextureActives
+    // only have ONE TextureActives object but there may be more than one TextureActive objects
+    // use an array for the first parameter here if there is more than one TextureActive object
+    // if you have many 3D objects that are not TextureActive objects see the layer parameter
+    const textureActives = new TextureActives(gallery, THREE, three, renderer, scene, camera, controls);
+    const textureActives2 = new TextureActives(gallery2, THREE, three, renderer, scene, camera, controls);
+
+    // To remove T key which toggles between 2D and 3D uncomment this:
+    // textureActives.manager.toggleKey = -1;
+
+	// if the object is not a plane then we use the CanvasTexture
+	// and this gets passed the canvas property of the ZIM TextureActive
+	// note - the box will get the interactive texture on all sides which is okay
+	// but here, we make the texture only on the front of the box
+	const cubeGeometry = new THREE.BoxGeometry(200,200,200);
+	const cubeTexture = new THREE.CanvasTexture(gallery.canvas);
+    const cubeTexture2 = new THREE.CanvasTexture(gallery2.canvas);
+	const cubeMaterial = [
+		new THREE.MeshLambertMaterial({color:white}),
+		new THREE.MeshLambertMaterial({color:red}),
+		new THREE.MeshLambertMaterial({color:dark}), //top
+		new THREE.MeshLambertMaterial({color:dark}), //bottom
+		new THREE.MeshLambertMaterial({map:cubeTexture}),
+		new THREE.MeshLambertMaterial({map:cubeTexture2}),
+	];
+	const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);           
+	scene.add(cube);
+	textureActives.addMesh(cube); // needs another parameter if layer is provided to TextureActives
+
+	// just because we chose Lambert (or Phong) material rather than basic
+	// LIGHTS - standard three.js   	
+	const light1 = new THREE.PointLight(white, 2.8);
+	light1.position.set(500, 500, 500);
+	light1.decay = 0; // needed for point lights these days...
+	scene.add(light1);
+	
+    const light2 = new THREE.AmbientLight(white, 2);
+    scene.add(light2);
+
+    // MODEL 
+    const loader = new GLTFLoader();
+    let fox;
+    // from https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0
+    loader.load("assets/Fox.glb", (gltf)=>{
+        fox = gltf.scene;
+        scene.add(fox);
+        fox.scale.set(9,9,9)
+        fox.rotation.y = 90*Math.PI/180;
+        fox.position.y = -1;
+
+    }, undefined, error=>{
+        console.error(error);
+    });  
+
+
+    
+    // // get array of intersecting objects
+    // let intersects = raycaster.intersectObjects(scene.children);
+
+    // for (var i=0; i<intersects.length; i++) {
+    //     let intersect = intersects[i];
+    //     // intersect has object, distance, face, faceIndex, point, uv properties
+    //     if (intersect.object == cube) {
+            
+    //         // this only works if the cube has an array of materials set
+    //         let materialIndex = intersect.face.materialIndex; // sigh
+    //         // cube.material[materialIndex].color.setHex(0xffffff); // sigh
+    //         cube.material[materialIndex].opacity = .5; 
+    //         // cube.material[materialIndex].color.setStyle("red"); 
+
+    //         // this would work if the cube had just one material
+    //         // rather than an array of materials
+    //         // cube.material.color.setHex(0xffffff);
+    //         // cube.material.color.setStyle("red"); 
+    //     }
+    // }
+
+
+              
+}
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
