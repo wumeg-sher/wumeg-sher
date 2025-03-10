@@ -38,11 +38,21 @@ function ready() {
     const physics = new Physics(10, new Boundary(0,-H*2,w,h), true);
     
 
-    const plushy = new Sprite("ai_plushies.png", 4, 5)
-        .centerReg() 
+    const sprite = new Sprite("ai_plushies.png", 4, 5)
+        .center() 
         // .outline()    
         // .run({frame:8})
-        .addPhysics({dynamic:false, contract:10, shape:"rectangle", bounciness:.5});
+        //.addPhysics({dynamic:false, contract:10, bounciness:.5});
+
+    const plushy = new Blob({
+        points: simplifyPoints(outlineImage(new Bitmap(sprite))),
+        color: faint,
+        interactive: false
+    }).loc(sprite).addPhysics();
+
+    sprite.addTo(plushy, 0);
+
+    plushy.addPhysics({dynamic:false, contract:10, shape:"rectangle"})
     
     physics.drag(plushy);
 

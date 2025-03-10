@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FULL, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+    // new Circle((W>H?H:W)/2, salmon)
+    // new Circle(100, salmon)
+    //     .scaleTo(S, 80, 80) //FILL is next param, default is fill, will go to FIT if add percentages 
+    //     .center()
+    //     .drag();
+
+    const button = new Button({
+        backgroundColor:salmon,
+        label:"okay"
+    })
+        // .siz(null, H*0.1) //.scaleTo(S,null,10)
+        // .pos(0,H*0.1,MIDDLE, BOTTOM)
+    const background = new Pic("assets/beach.jpeg")
+
+    const icon = new Pic("assets/mao.png").expand(0).tap(()=>{ //expand makes the whole thing clickable
+        zgo("https://zimjs.com")
+    });
+
+    const margin = (W>H?H:W)*.03
+
+
+    F.on("resize", ()=>{
+        button.scaleTo(S,null,10)
+        //button.height =H*0.1
+        //button.height = constrain(H*.1 30, 50)
+
+        //button.siz(null, Math.min(60,button.height))
+        //in CSS height:10%; max-height:50px;
+        //button.siz(null, Math.max(30, Math.min(60,button.height))) //limit the size of a button in a range
+        //button.siz(null, constrain(button.height, 30,60)) 
+        button.siz(null, constrain(button.height, null,60))  //constrains a max
+            .pos(0,H*0.1,MIDDLE, BOTTOM)
+    
+        icon.scaleTo(S, 20, 20)
+            .pos(margin, margin,LEFT, TOP)
+
+        background.scaleTo().center().bot();
+
+    })
+
+
+    F.on("orientation", ()=>{
+        zog("changing" + F.orientation)
+    })
+
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>

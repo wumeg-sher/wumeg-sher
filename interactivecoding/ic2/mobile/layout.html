@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Mobile Layout</title>
+
+<!-- zimjs.com - JavaScript Canvas Framework -->
+<script type="module">
+
+import zim from "https://zimjs.org/cdn/017/zim";
+
+// See Docs under Frame for FIT, FILL, FULL, and TAG
+new Frame(FULL, 1024, 768, light, dark, ready);
+function ready() {
+
+    // given F (Frame), S (Stage), W (width), H (height)
+    // put code here
+
+ const header = new Container(500,100).addTo()
+ new Label("LOGO").center(header)
+
+ const content = new Container(600,800).addTo()
+ const pic = new Pic("assets/cheese.png")
+    .scaleTo(content, 100)
+    .pos(0,0,CENTER,TOP, content)
+
+STYLE = {labelWidth:600, labelHeight:170}
+const info = new Label("Info about content. Oh I love cheese he is such a good boy he has a squishy little face and huge little eyes oh cheese he smells so good he is so sweet and skittish")
+    .pos(0,0,CENTER,BOTTOM, content)
+
+
+const footer = new Tabs().addTo()
+
+
+new Layout(S, [
+    {obj:header, backgroundColor:moon},
+    {obj:content, maxWidth:70, backgroundColor:light},
+    {obj:footer, maxWidth:80, align:LEFT, backgroundColor:yellow}
+], 3)  // lastMargin comes in as next parameter
+
+
+} // end ready
+
+</script>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body></body>
+</html>
